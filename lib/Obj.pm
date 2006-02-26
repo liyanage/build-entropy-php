@@ -2,6 +2,7 @@ package Obj;
 
 use strict;
 use warnings;
+use overload '""' => 'to_string';
 
 use Imports;
 
@@ -18,8 +19,7 @@ sub new {
 	
 	my $class = ref($self) || $self;
 	$self = bless {%args}, $class;
-	$self->{$_} ||= undef foreach qw(config shell);
-	$self->init_shell();	
+	$self->{$_} ||= undef foreach qw(config);
 	$self->init(%args);
 	Hash::Util::lock_keys(%$self);
 	
@@ -29,11 +29,6 @@ sub new {
 
 
 sub init {
-}
-
-sub init_shell {
-	my $self = shift @_;
-	$self->shell(Shell->new());
 }
 
 
@@ -49,6 +44,7 @@ sub log {
 }
 
 
+
 sub cd {
 
 	my $self = shift @_;
@@ -60,33 +56,51 @@ sub cd {
 
 }
 
+# $self->shell('nonfatal', 'silent', )
+# $self->shell({fatal => 0, silent => 1}, )
 
-sub do_shell {
+sub shell {
 
 	my $self = shift @_;
 	my (@items) = @_;
 
-	my $cmd = join(" ", @items);
-	$cmd .= " 2>&1";
+	my $options = ref($items[0]) ? shift @items : {};
+	$options->{fatal}  = 1 unless exists($options->{fatal});
+	$options->{silent} = 1 unless exists($options->{silent});
+	$options->{log}    = 1 unless exists($options->{log});
 
-	$self->log("execute: $cmd");
+	my $cmd = join(" ", @items, " 3>&1 2>&3");
+	$cmd .= " 1>/dev/null" if $options->{silent};
+#	$cmd .= " | tee /tmp/shell-$$.stdout";
+
+	$self->log("run shell: $cmd") if ($options->{log});
 
 #	my $output = `$cmd`;
-	my $output = '';
+#	my $output = '';
 	system($cmd);
 	my $status = $? >> 8;
-
-	if ($status) {
-		die "shell command failed with status '$status': '$cmd', output='$output'";
-	}
 	
-	return $output;
+	if ($status) {
+		my $msg = "shell command failed with status '$status': '$cmd'"; #, output='$output'
+		if ($options->{fatal}) {
+			die "fatal: $msg";
+		} else {
+			$self->log("nonfatal: $msg");
+		}
+	}
+
+#	return $output;
 
 }
 
 
-
-
+sub dir_contents {
+	
+	my $self = shift @_;
+	
+	return grep {!/^\.+$/} IO::Dir->new($_[0])->read();
+	
+}
 
 
 sub AUTOLOAD {
@@ -111,6 +125,19 @@ sub AUTOLOAD {
 	return $self->{$method};
 
 }
+
+
+
+
+sub to_string {
+
+	my $self = shift @_;
+
+	my $class = ref($self) || $self;
+	return "[$class]";
+
+}
+
 
 
 

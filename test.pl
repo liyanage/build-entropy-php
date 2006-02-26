@@ -1,4 +1,8 @@
 
+# asdfdsfeasdfas sadfsadf
+# asdfasdfgf
+
+
 use strict;
 use warnings;
 
@@ -7,8 +11,9 @@ use Package::php5;
 
 
 my $config = Config->new(
-	basedir => '/Users/liyanage/Desktop/universalbuild',
-	prefix  => '/Users/liyanage/Desktop/universalbuild/install',
+	basedir => '/Users/liyanage/svn/entropy/universalbuild',
+	prefix  => '/Users/liyanage/svn/entropy/universalbuild/install',
+	cpus    => 2,
 );
 
 my $package = Package::php5->new(config => $config);

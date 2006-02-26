@@ -14,6 +14,7 @@ sub init {
 	
 	$self->{$_} ||= undef foreach qw(basedir downloaddir);
 	$self->makedirs();
+	
 }
 
 
