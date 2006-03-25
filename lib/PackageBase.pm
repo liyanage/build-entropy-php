@@ -39,10 +39,6 @@ sub packagename {
 }
 
 
-sub do_build {
-	my ($self) = shift;
-	Carp::croak(sprintf("class %s must override method %s", ref($self) || $self, (caller(0))[3]));
-}
 
 
 sub filename {
@@ -69,17 +65,21 @@ sub download_path {
 
 
 
-
+# subclasses should override and call this and do
+# nothing if this does not return true
+#
 sub build {
 
 	my $self = shift @_;
-	return if ($self->is_built());
-	
+	return undef if ($self->is_built());
+
 	$self->unpack();
 
 	$_->install() foreach $self->dependencies();
 
 	$self->log("building");
+	
+	return 1;
 
 }
 
@@ -88,11 +88,17 @@ sub is_built {
 	return undef;
 }
 
+
+# subclasses should override and call this and do
+# nothing if this does not return true
+#
 sub install {
 	my $self = shift @_;
-	return if ($self->is_installed());
+	return undef if ($self->is_installed());
 	$self->build();
 	$self->log("installing");
+	
+	return 1;
 	
 }
 
@@ -178,6 +184,18 @@ sub make_flags {
 	my $cpus = $self->config()->cpus();
 	return $cpus > 1 ? " -j $cpus " : "";
 
+}
+
+sub make_command {
+	my $self = shift @_;
+	return "make" . $self->make_flags();
+}
+
+
+
+sub configure_flags {
+	my $self = shift @_;
+	return "--prefix=" . $self->config()->prefix();
 }
 
 

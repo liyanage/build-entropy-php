@@ -22,5 +22,11 @@ sub packagename {
 
 
 
+sub subpath_for_check {
+	return "lib/libcurl.dylib";
+}
+
+
+
 
 1;

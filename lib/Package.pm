@@ -15,19 +15,25 @@ sub build {
 
 	my $self = shift @_;
 
-	$self->SUPER::build(@_);
+	return unless ($self->SUPER::build(@_));
 	
 	die;
+	
+	return 1;
 
 }
+
+
 
 sub install {
 	
 	my $self = shift @_;
 
-	$self->SUPER::install(@_);
+	return undef unless ($self->SUPER::install(@_));
 	
 	die;
+	
+	return 1;
 
 }
 
