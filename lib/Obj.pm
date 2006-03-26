@@ -70,11 +70,11 @@ sub shell {
 	$options->{log}    = 1 unless exists($options->{log});
 
 	my $cmd = join(" ", @items, " 3>&1 2>&3");
-	$cmd .= " 1>/dev/null" if $options->{silent};
+	$cmd .= " 1>>/tmp/universalbuild.log" if $options->{silent};
 #	$cmd .= " | tee /tmp/shell-$$.stdout";
 
 	$self->log("run shell: $cmd") if ($options->{log});
-
+	
 #	my $output = `$cmd`;
 #	my $output = '';
 	system($cmd);
@@ -83,7 +83,7 @@ sub shell {
 	if ($status) {
 		my $msg = "shell command failed with status '$status': '$cmd'"; #, output='$output'
 		if ($options->{fatal}) {
-			die "fatal: $msg";
+			Carp::confess "fatal: $msg";
 		} else {
 			$self->log("nonfatal: $msg");
 		}
@@ -117,7 +117,7 @@ sub AUTOLOAD {
 	die "AUTOLOAD call for '$method'" if ($method eq 'AUTOLOAD');
 	
 	unless (exists($self->{$method})) {
-		Carp::croak("No property named '$method'");
+		Carp::confess("No property named '$method'");
 	}
 	
 	return undef unless ($method);

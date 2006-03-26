@@ -160,6 +160,7 @@ sub unpack {
 
 sub is_unpacked {
 	my $self = shift @_;
+	$self->log($self->packagesrcdir() . ": " . -d $self->packagesrcdir());
 	return -d $self->packagesrcdir();
 }
 
@@ -195,7 +196,7 @@ sub make_command {
 
 sub configure_flags {
 	my $self = shift @_;
-	return "--prefix=" . $self->config()->prefix();
+	return "--prefix=" . $self->install_prefix();
 }
 
 
@@ -219,6 +220,52 @@ sub to_string {
 	my $shortname = $self->shortname();
 	return "[package $shortname]";
 
+}
+
+
+
+sub extras_dir {
+
+	my $self = shift @_;
+
+	return $self->config()->basedir() . '/extras/' . $self->shortname();	
+
+}
+
+
+
+sub extras_path {
+
+	my $self = shift @_;
+	my ($filename) = @_;
+	
+	return $self->extras_dir() . "/$filename";
+
+}
+
+
+sub cflags {
+
+	my $self = shift @_;
+
+	return '';
+	
+}
+
+
+sub install_prefix {
+
+	my $self = shift @_;
+	return $self->config()->prefix();
+	
+}
+
+# prefix for packages we don't want to bundle
+sub install_tmp_prefix {
+
+	my $self = shift @_;
+	return $self->config()->basedir() . "/install-tmp";
+	
 }
 
 
