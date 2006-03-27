@@ -37,7 +37,7 @@ sub build {
 	foreach my $arch (qw(i386 ppc)) {
 		$self->cd_packagesrcdir();
 		$self->shell({fatal => 0}, 'make distclean') if (-e "Makefile");
-		$self->shell("CFLAGS='$cflags' CC='cc -arch $arch' CXX='c++ -arch $arch' ./configure " . $self->configure_flags());
+		$self->shell("CFLAGS='$cflags' CC='cc -arch $arch' CXX='c++ -arch $arch' ./configure " . $self->configure_flags(arch => $arch));
 		$self->shell("make" . $self->make_flags());
 
 		my $prefix = "$splice_dir/$arch/" . $self->install_prefix();

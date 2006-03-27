@@ -33,6 +33,7 @@ sub subpath_for_check {
 
 sub configure_flags {
 	my $self = shift @_;
+	my %args = @_;
 	my $prefix = $self->config()->prefix();
 
 	my $mysql_prefix = $self->config()->mysql_install_prefix();
@@ -46,10 +47,17 @@ sub configure_flags {
 		"--with-mysqli=$mysql_prefix/bin/mysql_config",
 		"--with-libxml-dir=$prefix",
 		"--with-xsl=$prefix",
+		"--with-curl=$prefix",
 	);
 
+	# add some PPC-only extensions if this is a PPC build
+	push @extension_flags, (
+		"--with-oci8=/Users/liyanage/Desktop/orahome",
+		"--with-pdo-oci=/Users/liyanage/Desktop/orahome",
+	) unless ($args{arch} eq 'i386');
 
-	return $self->SUPER::configure_flags() . " --with-curl=$prefix --with-apxs @extension_flags";
+	return $self->SUPER::configure_flags() . " --with-apxs @extension_flags";
+	
 }
 
 
