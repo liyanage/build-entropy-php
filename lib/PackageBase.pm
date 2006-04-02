@@ -102,12 +102,19 @@ sub install {
 	
 }
 
+
 sub is_installed {
 	my $self = shift @_;
-	return undef;
+	my $subpath = $self->subpath_for_check();
+	my $exists = -e $self->install_prefix() . "/$subpath";
+	$self->log("not installing because '$subpath' exists") if ($exists);
+	return $exists;
 }
 
 
+sub subpath_for_check {
+	Carp::confess "subclasses must implement this method or provide a different is_installed() implementation"
+}
 
 
 

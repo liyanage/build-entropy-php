@@ -22,7 +22,9 @@ sub packagename {
 
 
 sub dependency_names {
-	return qw(curl mysql libxml2 libxslt pdflib oracleinstantclient);
+	return qw(curl mysql libxml2 libxslt pdflib oracleinstantclient
+		imapcclient libjpeg libpng libfreetype);
+	#jpeg png freetype
 }
 
 
@@ -50,7 +52,14 @@ sub configure_flags {
 		"--with-curl=$prefix",
 		"--with-pdflib=$prefix",
 		"--with-gd",
+		"--enable-gd-native-ttf",
+		"--with-jpeg-dir=$prefix",
+		"--with-png-dir=$prefix",
+		'--with-zlib-dir=/usr',
+		"--with-freetype-dir=$prefix",
 		"--with-imap=../imap-2004g",
+		"--with-kerberos=/usr",
+		"--with-imap-ssl=/usr",
 	);
 
 
@@ -72,7 +81,6 @@ sub configure_flags {
 
 
 
-
 sub build_arch_pre {
 
 	my $self = shift @_;
@@ -89,6 +97,9 @@ sub build_arch_pre {
 	$self->cd_packagesrcdir();
 	$self->shell("aclocal");
 	$self->shell("./buildconf --force");
+	$self->shell({fatal => 0}, "ranlib " . $self->install_prefix() . "/lib/*.a");
+	$self->shell({fatal => 0}, "ranlib " . $self->install_tmp_prefix() . "/lib/*.a");
+
 }
 
 
@@ -158,11 +169,10 @@ sub cflags {
 
 	my $self = shift @_;
 	
-	my $cflags = $self->SUPER::cflags();
-	
-	return $cflags ? "$cflags -DENTROPY_CH_RELEASE=$RELEASE" : "-DENTROPY_CH_RELEASE=$RELEASE";
+	return $self->SUPER::cflags(@_) . " -DENTROPY_CH_RELEASE=$RELEASE"
 
 }
+
 
 
 1;

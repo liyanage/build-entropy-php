@@ -142,14 +142,6 @@ sub is_built {
 }
 
 
-sub is_installed {
-	my $self = shift @_;
-	my $subpath = $self->subpath_for_check();
-	my $exists = -e $self->install_prefix() . "/$subpath";
-	$self->log("not installing because '$subpath' exists") if ($exists);
-	return $exists;
-}
-
 
 
 1;

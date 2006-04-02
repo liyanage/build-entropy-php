@@ -40,6 +40,14 @@ sub is_built {
 	return -e $self->packagesrcdir() . "/c-client/c-client.a";
 }
 
+sub install {
+
+	# this package is never installed
+	return undef;
+
+}
+
+
 
 
 1;
