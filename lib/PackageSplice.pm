@@ -32,17 +32,18 @@ sub build {
 	my $shortname = $self->shortname();
 	my $splice_dir = $self->splice_dir();
 
-	my $cflags = $self->cflags();
-
 	foreach my $arch (qw(i386 ppc)) {
+		
 		$self->cd_packagesrcdir();
-		$self->shell({fatal => 0}, 'make distclean') if (-e "Makefile");
-		$self->shell("CFLAGS='$cflags' CC='cc -arch $arch' CXX='c++ -arch $arch' ./configure " . $self->configure_flags(arch => $arch));
-		$self->shell("make" . $self->make_flags());
+		$self->build_arch_pre(arch => $arch);
+
+		$self->build_arch(arch => $arch);
+
+		$self->cd_packagesrcdir();
+		$self->build_arch_post(arch => $arch);
 
 		my $prefix = "$splice_dir/$arch/" . $self->install_prefix();
-
-		$self->make_install_arch(prefix => $prefix);
+		$self->make_install_arch(arch => $arch, prefix => $prefix);
 
 	}
 
@@ -51,6 +52,28 @@ sub build {
 
 	return 1;
 }
+
+
+sub build_arch_pre {}
+sub build_arch_post {}
+
+
+
+sub build_arch {
+
+	my $self = shift @_;
+	my (%args) = @_;
+
+	my $cflags = $self->cflags();
+
+	$self->cd_packagesrcdir();
+	$self->shell({fatal => 0}, 'make distclean') if (-e "Makefile");
+	$self->shell("CFLAGS='$cflags' CC='cc -arch $args{arch}' CXX='c++ -arch $args{arch}' ./configure " . $self->configure_flags(arch => $args{arch}));
+	$self->shell("make" . $self->make_flags());
+
+}
+
+
 
 
 
@@ -108,7 +131,13 @@ sub is_built {
 	my $self = shift @_;
 	my $subpath = $self->subpath_for_check();
 	my $exists = -e $self->splice_prefix() . "/$subpath";
-	$self->log("not building because '$subpath' exists") if ($exists);
+
+	if ($exists) {
+		$self->log("not building because '$subpath' exists")
+	} else {
+		$self->log("building because '$subpath' does not exist")	
+	}
+
 	return $exists;
 }
 

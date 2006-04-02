@@ -22,7 +22,7 @@ sub packagename {
 
 
 sub dependency_names {
-	return qw(curl mysql libxml2 libxslt);
+	return qw(curl mysql libxml2 libxslt pdflib oracleinstantclient);
 }
 
 
@@ -48,17 +48,49 @@ sub configure_flags {
 		"--with-libxml-dir=$prefix",
 		"--with-xsl=$prefix",
 		"--with-curl=$prefix",
+		"--with-pdflib=$prefix",
+		"--with-gd",
+		"--with-imap=../imap-2004g",
 	);
 
+
 	# add some PPC-only extensions if this is a PPC build
-	push @extension_flags, (
-		"--with-oci8=/Users/liyanage/Desktop/orahome",
-		"--with-pdo-oci=/Users/liyanage/Desktop/orahome",
-	) unless ($args{arch} eq 'i386');
+	if ($args{arch} eq 'ppc') {
+		# add some PPC-only extensions if this is a PPC build
+
+		push @extension_flags, (
+			"--with-oci8=instantclient,$prefix/oracle",
+			"--with-pdo-oci=instantclient,$prefix/oracle,10.1.0.3",
+		);
+
+	}
+
 
 	return $self->SUPER::configure_flags() . " --with-apxs @extension_flags";
 	
 }
+
+
+
+
+sub build_arch_pre {
+
+	my $self = shift @_;
+	my (%args) = @_;
+
+	$self->cd('ext');
+	$self->shell("rm -rf pdf");
+	my $pdflib_extension_tarball = $self->extras_dir() . "/pdflib-2.0.5.tgz";
+	die "pdflib extensions tarball '$pdflib_extension_tarball' does not exist" unless (-f $pdflib_extension_tarball);
+
+	$self->shell("tar -xzvf $pdflib_extension_tarball");
+	$self->shell("mv pdflib-2.*.* pdf; rm package.xml");
+
+	$self->cd_packagesrcdir();
+	$self->shell("aclocal");
+	$self->shell("./buildconf --force");
+}
+
 
 
 
@@ -131,9 +163,6 @@ sub cflags {
 	return $cflags ? "$cflags -DENTROPY_CH_RELEASE=$RELEASE" : "-DENTROPY_CH_RELEASE=$RELEASE";
 
 }
-
-
-
 
 
 1;

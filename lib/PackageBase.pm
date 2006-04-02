@@ -160,7 +160,7 @@ sub unpack {
 
 sub is_unpacked {
 	my $self = shift @_;
-	$self->log($self->packagesrcdir() . ": " . -d $self->packagesrcdir());
+#	$self->log("is unpacked: " . $self->packagesrcdir() . ": " . -d $self->packagesrcdir());
 	return -d $self->packagesrcdir();
 }
 

@@ -8,32 +8,6 @@ use base qw(PackageBase);
 
 our $VERSION = '1.0';
 
-
-
-sub build {
-
-	my $self = shift @_;
-
-	return unless ($self->SUPER::build(@_));
-	
-	die;
-	
-	return 1;
-
-}
-
-
-
-sub install {
-	
-	my $self = shift @_;
-
-	return undef unless ($self->SUPER::install(@_));
-	
-	die;
-	
-	return 1;
-
-}
+# superclass for simple packages which don't require splice build
 
 1;
