@@ -60,6 +60,21 @@ sub configure_flags {
 		"--with-imap=../imap-2004g",
 		"--with-kerberos=/usr",
 		"--with-imap-ssl=/usr",
+		"--with-ldap",
+		"--with-iodbc=/usr",
+		"--with-xmlrpc",
+		"--with-iconv-dir=/usr",
+		"--enable-exif",
+		"--enable-wddx",
+		"--enable-soap",
+		"--enable-sqlite-utf8",
+		"--enable-ftp",
+		"--enable-sockets",
+		"--enable-dbx",
+		"--enable-dbase",
+		"--enable-mbstring",
+		"--enable-calendar",
+		"--with-bz2=/usr",
 	);
 
 
