@@ -27,6 +27,15 @@ sub subpath_for_check {
 }
 
 
+sub php_extension_configure_flags {
+
+	my $self = shift @_;
+	my (%args) = @_;
+
+	return "--with-libxml-dir=shared," . $self->config()->prefix();
+
+}
+
 
 
 1;

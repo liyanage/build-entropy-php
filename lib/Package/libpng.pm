@@ -28,5 +28,17 @@ sub configure_flags {
 	return $self->SUPER::configure_flags(@_) . " --without-x";
 }
 
+sub php_extension_configure_flags {
+
+	my $self = shift @_;
+	my (%args) = @_;
+
+	return "--with-png-dir=" . $self->config()->prefix();
+
+}
+
+
+
+
 
 1;

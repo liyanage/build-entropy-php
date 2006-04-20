@@ -64,5 +64,16 @@ sub install {
 }
 
 
+sub php_extension_configure_flags {
+
+	my $self = shift @_;
+	my (%args) = @_;
+
+	return "--with-jpeg-dir=" . $self->config()->prefix();
+
+}
+
+
+
 
 1;

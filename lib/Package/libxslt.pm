@@ -40,4 +40,16 @@ sub configure_flags {
 
 
 
+sub php_extension_configure_flags {
+
+	my $self = shift @_;
+	my (%args) = @_;
+
+	return "--with-xsl=shared," . $self->config()->prefix();
+
+}
+
+
+
+
 1;

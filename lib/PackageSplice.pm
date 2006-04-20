@@ -93,7 +93,7 @@ sub make_install_override_list {
 	my $self = shift @_;
 	my (%args) = @_;
 
-	return "prefix=$args{prefix} exec_prefix=$args{prefix} bindir=$args{prefix}/bin sbindir=$args{prefix}/sbin sysconfdir=$args{prefix}/etc datadir=$args{prefix}/share includedir=$args{prefix}/include libdir=$args{prefix}/lib libexecdir=$args{prefix}/libexec localstatedir=$args{prefix}/var sharedstatedir=$args{prefix}/com mandir=$args{prefix}/man infodir=$args{prefix}/info";
+	return "prefix=$args{prefix} exec_prefix=$args{prefix} bindir=$args{prefix}/bin sbindir=$args{prefix}/sbin sysconfdir=$args{prefix}/etc datadir=$args{prefix}/share includedir=$args{prefix}/include libdir=$args{prefix}/lib libexecdir=$args{prefix}/libexec localstatedir=$args{prefix}/var sharedstatedir=$args{prefix}/com mandir=$args{prefix}/man infodir=$args{prefix}/info EXTENSION_DIR=$args{prefix}/lib/php/extensions/no-debug-non-zts-20050922";
 
 }
 

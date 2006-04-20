@@ -40,12 +40,27 @@ sub is_built {
 	return -e $self->packagesrcdir() . "/c-client/c-client.a";
 }
 
-sub install {
 
+sub install {
+	my $self = shift @_;
 	# this package is never installed
+	return $self->SUPER::install(@_);
+}
+
+sub is_installed {
 	return undef;
+}
+
+
+sub php_extension_configure_flags {
+
+	my $self = shift @_;
+	my (%args) = @_;
+
+	return "--with-imap=../imap-2004g --with-kerberos=/usr --with-imap-ssl=/usr";
 
 }
+
 
 
 

@@ -277,4 +277,31 @@ sub install_tmp_prefix {
 
 
 
+sub supported_archs {
+
+	return qw(ppc i386);
+
+}
+
+sub supports_arch {
+
+	my $self = shift @_;
+	my ($arch) = @_;
+	
+	return grep {$_ eq $arch} $self->supported_archs();
+
+}
+
+
+
+
+
+sub php_extension_configure_flags {
+	return "";
+}
+
+
+
+
+
 1;

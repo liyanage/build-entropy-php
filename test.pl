@@ -12,7 +12,7 @@ use Package::php5;
 
 my $config = Config->new(
 	basedir              => '/Users/liyanage/svn/entropy/universalbuild',
-	prefix               => '/Users/liyanage/svn/entropy/universalbuild/install',
+	prefix               => '/usr/local/php5',
 	orahome              => '/Users/liyanage/svn/entropy/universalbuild/install',
 	pdflib_lite          => 1,
 	mysql_install_prefix => undef,

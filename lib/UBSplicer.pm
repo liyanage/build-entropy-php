@@ -108,13 +108,12 @@ sub process_file {
 
 #	$self->log("filetype ($is_executable): $filetype");
 
-	return $self->copy($subpath) unless ($is_executable);
+	my @archs = grep {-e $_} $self->arch_paths($subpath);
+	return $self->copy($subpath) unless ($is_executable and @archs > 1);
 
 	my $universal = $self->universal_path($subpath);
-	my @archs = $self->arch_paths($subpath);
-
-	$self->shell({log => 0}, "lipo -create @archs -output $universal");
 	$self->log("running lipo for $subpath");
+	$self->shell({log => 0}, "lipo -create @archs -output $universal");
 
 }
 

@@ -24,7 +24,6 @@ sub packagename {
 sub dependency_names {
 	return qw(curl mysql libxml2 libxslt pdflib oracleinstantclient
 		imapcclient libjpeg libpng libfreetype);
-	#jpeg png freetype
 }
 
 
@@ -38,30 +37,15 @@ sub configure_flags {
 	my %args = @_;
 	my $prefix = $self->config()->prefix();
 
-	my $mysql_prefix = $self->config()->mysql_install_prefix();
-	die "mysql instal prefix '$mysql_prefix' does not exist" unless (-d $mysql_prefix);
-
 	my @extension_flags = (
+		"--with-config-file-scan-dir=$prefix/config",
 		'--with-iconv',
 		'--with-openssl=/usr',
 		'--with-zlib=/usr',
-		"--with-mysql=$mysql_prefix",
-		"--with-mysqli=$mysql_prefix/bin/mysql_config",
-		"--with-libxml-dir=$prefix",
-		"--with-xsl=$prefix",
-		"--with-curl=$prefix",
-		"--with-pdflib=$prefix",
 		"--with-gd",
-		"--enable-gd-native-ttf",
-		"--with-jpeg-dir=$prefix",
-		"--with-png-dir=$prefix",
 		'--with-zlib-dir=/usr',
-		"--with-freetype-dir=$prefix",
-		"--with-imap=../imap-2004g",
-		"--with-kerberos=/usr",
-		"--with-imap-ssl=/usr",
 		"--with-ldap",
-		"--with-iodbc=/usr",
+		"--with-iodbc=shared,/usr",
 		"--with-xmlrpc",
 		"--with-iconv-dir=/usr",
 		"--enable-exif",
@@ -77,21 +61,21 @@ sub configure_flags {
 		"--with-bz2=/usr",
 	);
 
-
-	# add some PPC-only extensions if this is a PPC build
-	if ($args{arch} eq 'ppc') {
-		# add some PPC-only extensions if this is a PPC build
-
-		push @extension_flags, (
-			"--with-oci8=instantclient,$prefix/oracle",
-			"--with-pdo-oci=instantclient,$prefix/oracle,10.1.0.3",
-		);
-
-	}
-
+	push @extension_flags, $self->dependency_extension_flags(%args);
 
 	return $self->SUPER::configure_flags() . " --with-apxs @extension_flags";
 	
+}
+
+
+
+sub dependency_extension_flags {
+
+	my $self = shift @_;
+	my (%args) = @_;
+
+	return map {$_->php_extension_configure_flags()} grep {$_->supports_arch($args{arch})} $self->dependencies();
+
 }
 
 
@@ -128,7 +112,7 @@ sub make_install_arch {
 
 	my $install_override = $self->make_install_override_list(prefix => $args{prefix});
 
-	$self->shell($self->make_command() . " $install_override install-$_") foreach qw(cli pear build headers programs);
+	$self->shell($self->make_command() . " $install_override install-$_") foreach qw(cli pear build headers programs modules);
 	$self->shell("cp libs/libphp5.so $args{prefix}");
 
 }
@@ -147,7 +131,7 @@ sub install {
 	$self->cd_packagesrcdir();
 	$self->shell({silent => 0}, "cat $extrasdir/dist/httpd.conf.php | sed -e 's!{prefix}!$prefix!g' > $prefix/httpd.conf.php");
 	$self->shell({silent => 0}, "cp php.ini-recommended $prefix/lib/");
-
+	$self->shell({silent => 0}, "mkdir $prefix/php.d");
 
 }
 

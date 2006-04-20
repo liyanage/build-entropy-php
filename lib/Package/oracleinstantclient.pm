@@ -103,4 +103,29 @@ sub oracle_files {
 
 
 
+sub supported_archs {
+
+	return qw(ppc);
+
+}
+
+
+
+sub php_extension_configure_flags {
+
+	my $self = shift @_;
+	my (%args) = @_;
+
+	my $prefix = $self->config()->prefix();
+	
+	return "--with-oci8=shared,instantclient,$prefix/oracle --with-pdo-oci=shared,instantclient,$prefix/oracle,10.1.0.3";
+
+}
+
+
+
+
+
+
+
 1;

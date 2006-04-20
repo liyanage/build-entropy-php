@@ -7,6 +7,7 @@ use base qw(PackageSplice);
 
 our $VERSION = '5.0.19';
 
+# use disable-shared 
 
 sub init {
 
@@ -54,6 +55,23 @@ sub install {
 
 	return 1;
 }
+
+
+
+
+sub php_extension_configure_flags {
+
+	my $self = shift @_;
+	my (%args) = @_;
+
+	my $mysql_prefix = $self->config()->mysql_install_prefix();
+	die "mysql install prefix '$mysql_prefix' does not exist" unless (-d $mysql_prefix);
+
+	return "--with-mysql=$mysql_prefix --with-mysqli=$mysql_prefix/bin/mysql_config";
+
+}
+
+
 
 
 
