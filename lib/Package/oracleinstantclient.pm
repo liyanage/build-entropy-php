@@ -49,6 +49,8 @@ sub install {
 
 	$self->log("installing");
 	
+	$self->unpack();
+	
 	$self->cd_packagesrcdir();
 	my $prefix = $self->config()->prefix();
 	$self->shell("mkdir -p $prefix/oracle");
@@ -124,6 +126,22 @@ sub php_extension_configure_flags {
 
 
 
+
+sub php_dso_extension_names {
+	my $self = shift @_;
+	return qw(pdo_oci oci8);
+}
+
+
+
+
+sub package_filelist {
+
+	my $self = shift @_;
+
+	return qw(lib/php/extensions/no-debug-non-zts-20050922/*oci* oracle/lib* php.d/extension-*oci*.ini);
+	
+}
 
 
 

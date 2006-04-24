@@ -73,4 +73,22 @@ sub php_extension_configure_flags {
 }
 
 
+
+
+
+sub php_dso_extension_names {
+	my $self = shift @_;
+	return qw(pdf);
+}
+
+
+
+sub package_filelist {
+
+	my $self = shift @_;
+
+	return qw(lib/php/extensions/no-debug-non-zts-20050922/pdf php.d/extension-pdf.ini lib/libpdf*.dylib);
+	
+}
+
 1;

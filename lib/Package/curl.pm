@@ -40,5 +40,27 @@ sub php_extension_configure_flags {
 
 
 
+sub php_dso_extension_names {
+	my $self = shift @_;
+	return $self->shortname();
+}
+
+
+
+
+
+
+
+sub package_filelist {
+
+	my $self = shift @_;
+
+	return qw(lib/php/extensions/no-debug-non-zts-20050922/curl lib/libcurl*.dylib php.d/extension-curl.ini);
+	
+}
+
+
+
+
 
 1;

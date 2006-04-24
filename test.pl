@@ -21,6 +21,6 @@ my $config = Config->new(
 
 my $php5 = Package::php5->new(config => $config);
 
-$php5->distimage();
+$php5->create_distimage();
 
 

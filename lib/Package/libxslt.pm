@@ -51,5 +51,20 @@ sub php_extension_configure_flags {
 
 
 
+sub php_dso_extension_names {
+	my $self = shift @_;
+	return qw(xsl);
+}
+
+
+sub package_filelist {
+
+	my $self = shift @_;
+
+	return qw(lib/php/extensions/no-debug-non-zts-20050922/xsl php.d/extension-xsl.ini lib/libexslt*.dylib lib/libxslt*.dylib);
+	
+}
+
+
 
 1;

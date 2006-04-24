@@ -46,6 +46,7 @@ sub filename {
 	return $self->packagename() . ".tar.gz";
 }
 
+
 sub packagesrcdir {
 	my $self = shift @_;
 	return $self->config()->srcdir() . "/" . $self->packagename(); 
@@ -62,6 +63,62 @@ sub download_path {
 	my $self = shift @_;
 	return $self->config()->downloaddir() . "/" . $self->filename();
 }
+
+# subclasses should override and call this and do
+# nothing if this does not return true
+#
+sub create_package {
+
+	my $self = shift @_;
+	return undef if ($self->is_packaged());
+
+	$_->create_package() foreach $self->dependencies();
+
+	my $list = join(' ', $self->package_filelist());
+
+	return undef unless ($list);
+
+	$self->log("packaging");
+	
+	$self->shell("mkdir -p '/tmp/universalbuild-pkgdst'");
+	
+	my $dir = "/tmp/universalbuild-pkg/" . $self->shortname();
+	my $dst = "/tmp/universalbuild-pkgdst/entropy-php-extension-" . $self->shortname() . ".pkg";
+	my $infofile = $self->extras_path('package/Info.plist');
+	my $prefix = $self->config()->prefix();
+	my $shortname = $self->shortname();
+	$self->shell({silent => 0}, "cat $infofile | sed -e 's!{prefix}!$prefix!g' | sed -e 's!{shortname}!$shortname!g' > $infofile.out");
+	
+	$self->shell("mkdir -p $dir");
+	$self->shell("rm -rf $dir/*");
+
+	$self->cd($self->config()->prefix());
+	$self->shell("tar -cf - $list | (cd $dir && tar -xf -)");
+
+	$self->shell({silent => 0}, "/Developer/Tools/packagemaker -build -ds -v -i '$infofile.out' -p '$dst' -f '$dir'");
+	
+#	$self->cd($self->config()->prefix());
+#	my @list = map {glob($_)} $self->package_filelist();
+	
+
+}
+
+sub is_packaged {
+
+	my $self = shift @_;
+	
+	return undef;
+
+}
+
+
+# return the list of file globs below the prefix
+# to be included in the installer package
+#
+sub package_filelist {
+	return ();
+}
+
 
 
 
@@ -300,6 +357,12 @@ sub php_extension_configure_flags {
 	return "";
 }
 
+
+
+
+sub php_dso_extension_names {
+	return undef;
+}
 
 
 

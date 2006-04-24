@@ -23,7 +23,7 @@ sub packagename {
 
 sub dependency_names {
 	return qw(curl mysql libxml2 libxslt pdflib oracleinstantclient
-		imapcclient libjpeg libpng libfreetype);
+		imapcclient libjpeg libpng libfreetype iodbc);
 }
 
 
@@ -45,7 +45,6 @@ sub configure_flags {
 		"--with-gd",
 		'--with-zlib-dir=/usr',
 		"--with-ldap",
-		"--with-iodbc=shared,/usr",
 		"--with-xmlrpc",
 		"--with-iconv-dir=/usr",
 		"--enable-exif",
@@ -146,14 +145,32 @@ sub install {
 	my $extrasdir = $self->extras_dir();
 	my $prefix = $self->config()->prefix();
 
-	$self->install_cleanup();
+
+#	$self->install_cleanup();
 
 	$self->cd_packagesrcdir();
 	$self->shell({silent => 0}, "cat $extrasdir/dist/entropy-php.conf | sed -e 's!{prefix}!$prefix!g' > $prefix/entropy-php.conf");
+	$self->shell({silent => 0}, "cat $extrasdir/dist/resources/activate-entropy-php.py | sed -e 's!{prefix}!$prefix!g' > $prefix/bin/activate-entropy-php.py");
 	$self->shell({silent => 0}, "cp php.ini-recommended $prefix/lib/");
-	$self->shell({silent => 0}, "mkdir $prefix/php.d");
+	$self->shell({silent => 0}, "test -d $prefix/php.d || mkdir $prefix/php.d");
+
+	$self->create_dso_ini_files();
 
 }
+
+
+
+sub create_dso_ini_files {
+
+	my $self = shift @_;
+
+	my @dso_names = grep {$_} map {$_->php_dso_extension_names()} $self->dependencies();
+	my $prefix = $self->config()->prefix();
+	$self->shell({silent => 0}, "echo 'extension=$_' > $prefix/php.d/extension-$_.ini") foreach (@dso_names);
+
+}
+
+
 
 sub install_cleanup {
 
@@ -161,17 +178,33 @@ sub install_cleanup {
 
 	my $prefix = $self->config()->prefix();
 
-	$self->shell("rm $prefix/lib/php/extensions/*/*.a");
+	$self->shell({fatal => 0}, "rm $prefix/lib/php/extensions/*/*.a");
 
 }
 
 
-sub distimage {
+
+
+sub create_package {
+
+	my $self = shift @_;
+
+	return unless ($self->SUPER::create_package(@_));
+	
+	return undef;
+
+}
+
+
+
+
+sub create_distimage {
 
 	my $self = shift @_;
 
 	$self->install();
 
+	$self->create_package();
 
 }
 
