@@ -64,9 +64,7 @@ sub download_path {
 	return $self->config()->downloaddir() . "/" . $self->filename();
 }
 
-# subclasses should override and call this and do
-# nothing if this does not return true
-#
+
 sub create_package {
 
 	my $self = shift @_;
@@ -83,7 +81,7 @@ sub create_package {
 	$self->shell("mkdir -p '/tmp/universalbuild-pkgdst'");
 	
 	my $dir = "/tmp/universalbuild-pkg/" . $self->shortname();
-	my $dst = "/tmp/universalbuild-pkgdst/entropy-php-extension-" . $self->shortname() . ".pkg";
+	my $dst = "/tmp/universalbuild-pkgdst/" . $self->pkg_filename();
 	my $infofile = $self->extras_path('package/Info.plist');
 	my $prefix = $self->config()->prefix();
 	my $shortname = $self->shortname();
@@ -97,11 +95,18 @@ sub create_package {
 
 	$self->shell({silent => 0}, "/Developer/Tools/packagemaker -build -ds -v -i '$infofile.out' -p '$dst' -f '$dir'");
 	
-#	$self->cd($self->config()->prefix());
-#	my @list = map {glob($_)} $self->package_filelist();
-	
 
 }
+
+
+sub pkg_filename {
+	my $self = shift @_;
+	my $version = $self->config()->version() . '-' . $self->config()->release();
+	return "entropy-php-$version-extension-" . $self->shortname() . ".pkg";
+}
+
+
+
 
 sub is_packaged {
 

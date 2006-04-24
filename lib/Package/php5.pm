@@ -5,7 +5,6 @@ use warnings;
 
 use base qw(PackageSplice);
 
-our $VERSION = '5.1.2';
 our $RELEASE = 4;
 
 
@@ -17,7 +16,8 @@ sub base_url {
 
 
 sub packagename {
-	return "php-$VERSION";
+	my $self = shift @_;
+	return "php-" . $self->config()->version();
 }
 
 
@@ -230,9 +230,50 @@ sub cflags {
 
 	my $self = shift @_;
 	
-	return $self->SUPER::cflags(@_) . " -DENTROPY_CH_RELEASE=$RELEASE"
+	return $self->SUPER::cflags(@_) . " -DENTROPY_CH_RELEASE=" . $self->config()->release();
 
 }
+
+
+
+
+sub package_filelist {
+
+	my $self = shift @_;
+
+	return qw(
+		entropy-php.conf libphp5.so etc lib/libxml2*.dylib lib/libpng12*.dylib
+		lib/libfreetype*.dylib bin/php* bin/activate-*
+	);
+	
+}
+
+
+
+
+
+sub create_package {
+
+	my $self = shift @_;
+
+	$self->SUPER::create_package(@_);
+
+
+	# metapackage	
+}
+
+
+sub pkg_filename {
+	my $self = shift @_;
+	my $version = $self->config()->version() . '-' . $self->config()->release();
+	return "entropy-php-$version.pkg";
+}
+
+
+
+
+
+
 
 
 
