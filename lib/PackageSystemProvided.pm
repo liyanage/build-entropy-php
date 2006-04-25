@@ -13,6 +13,8 @@ sub is_downloaded {
 	return 1;
 }
 
-
+sub is_installed {
+	return 1
+};
 
 1;

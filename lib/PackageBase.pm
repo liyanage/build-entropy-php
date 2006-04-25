@@ -93,9 +93,18 @@ sub create_package {
 	$self->cd($self->config()->prefix());
 	$self->shell("tar -cf - $list | (cd $dir && tar -xf -)");
 
+	$self->prepackage_hook($dir);
+
 	$self->shell({silent => 0}, "/Developer/Tools/packagemaker -build -ds -v -i '$infofile.out' -p '$dst' -f '$dir'");
 	
 
+}
+
+
+sub prepackage_hook {
+	my $self = shift @_;
+	my ($pkgroot) = @_;
+	return undef;
 }
 
 

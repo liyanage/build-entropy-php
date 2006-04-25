@@ -242,8 +242,8 @@ sub package_filelist {
 	my $self = shift @_;
 
 	return qw(
-		entropy-php.conf libphp5.so etc lib/libxml2*.dylib lib/libpng12*.dylib
-		lib/libfreetype*.dylib bin/php* bin/activate-*
+		entropy-php.conf libphp5.so etc lib/libxml2*.dylib lib/libpng*.dylib
+		lib/libfreetype*.dylib bin/php* bin/activate-* lib/php.ini-recommended
 	);
 	
 }
@@ -260,6 +260,16 @@ sub create_package {
 
 
 	# metapackage	
+}
+
+sub prepackage_hook {
+
+	my $self = shift @_;
+	my ($pkgroot) = @_;
+	
+	$self->shell("mkdir -p $pkgroot/lib/php/extensions/no-debug-non-zts-20050922");
+	$self->shell("mkdir -p $pkgroot/php.d");
+
 }
 
 

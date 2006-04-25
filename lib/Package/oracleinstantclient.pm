@@ -8,6 +8,8 @@ use base qw(PackageBinary);
 our $VERSION = '10.1';
 
 
+#http://download-uk.oracle.com/otn/mac/instantclient/instantclient-basic-macosx-10.1.0.3.zip
+#http://download-uk.oracle.com/otn/mac/instantclient/instantclient-sdk-macosx-10.1.0.3.zip
 
 sub base_url {
 	my $self = shift;
