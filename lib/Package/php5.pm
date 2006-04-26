@@ -38,7 +38,7 @@ sub configure_flags {
 	my $prefix = $self->config()->prefix();
 
 	my @extension_flags = (
-		"--with-config-file-scan-dir=$prefix/config",
+		"--with-config-file-scan-dir=$prefix/php.d",
 		'--with-iconv',
 		'--with-openssl=/usr',
 		'--with-zlib=/usr',
@@ -182,18 +182,6 @@ sub install_cleanup {
 
 }
 
-
-
-
-sub create_package {
-
-	my $self = shift @_;
-
-	return unless ($self->SUPER::create_package(@_));
-	
-	return undef;
-
-}
 
 
 

@@ -1,11 +1,51 @@
-diff -ru php-4.3.6/ext/standard/info.c php-4.3.6.entropy/ext/standard/info.c
---- php-4.3.6/ext/standard/info.c	Mon Mar 15 11:39:53 2004
-+++ php-4.3.6.entropy/ext/standard/info.c	Tue Apr 27 18:44:04 2004
-@@ -419,6 +419,7 @@
+diff -ru php-5.1.2/ext/mysqli/mysqli.c php-5.1.2.entropy/ext/mysqli/mysqli.c
+--- php-5.1.2/ext/mysqli/mysqli.c	2006-01-01 13:50:09.000000000 +0100
++++ php-5.1.2.entropy/ext/mysqli/mysqli.c	2006-04-26 00:56:13.000000000 +0200
+@@ -43,6 +43,13 @@
+ static HashTable mysqli_stmt_properties;
+ static HashTable mysqli_warning_properties;
+ 
++zend_class_entry *mysqli_link_class_entry;
++zend_class_entry *mysqli_stmt_class_entry;
++zend_class_entry *mysqli_result_class_entry;
++zend_class_entry *mysqli_driver_class_entry;
++zend_class_entry *mysqli_warning_class_entry;                     
++zend_class_entry *mysqli_exception_class_entry;
++
+ extern void php_mysqli_connect(INTERNAL_FUNCTION_PARAMETERS);
+ 
+ typedef int (*mysqli_read_t)(mysqli_object *obj, zval **retval TSRMLS_DC);
+diff -ru php-5.1.2/ext/mysqli/php_mysqli.h php-5.1.2.entropy/ext/mysqli/php_mysqli.h
+--- php-5.1.2/ext/mysqli/php_mysqli.h	2006-01-01 13:50:09.000000000 +0100
++++ php-5.1.2.entropy/ext/mysqli/php_mysqli.h	2006-04-26 00:55:56.000000000 +0200
+@@ -149,12 +149,12 @@
+ extern int php_local_infile_error(void *, char *, uint);
+ extern void php_set_local_infile_handler_default(MY_MYSQL *);
+ extern void php_mysqli_throw_sql_exception(char *sqlstate, int errorno TSRMLS_DC, char *format, ...);
+-zend_class_entry *mysqli_link_class_entry;
+-zend_class_entry *mysqli_stmt_class_entry;
+-zend_class_entry *mysqli_result_class_entry;
+-zend_class_entry *mysqli_driver_class_entry;
+-zend_class_entry *mysqli_warning_class_entry;
+-zend_class_entry *mysqli_exception_class_entry;
++extern zend_class_entry *mysqli_link_class_entry;
++extern zend_class_entry *mysqli_stmt_class_entry;
++extern zend_class_entry *mysqli_result_class_entry;
++extern zend_class_entry *mysqli_driver_class_entry;
++extern zend_class_entry *mysqli_warning_class_entry;
++extern zend_class_entry *mysqli_exception_class_entry;
+ 
+ #ifdef HAVE_SPL
+ extern PHPAPI zend_class_entry *spl_ce_RuntimeException;
+diff -ru php-5.1.2/ext/standard/info.c php-5.1.2.entropy/ext/standard/info.c
+--- php-5.1.2/ext/standard/info.c	2006-01-01 13:50:15.000000000 +0100
++++ php-5.1.2.entropy/ext/standard/info.c	2006-04-26 00:57:18.000000000 +0200
+@@ -436,6 +436,7 @@
  
  		if (!sapi_module.phpinfo_as_text) {
  			php_printf("<h1 class=\"p\">PHP Version %s</h1>\n", PHP_VERSION);
 +                        php_printf("<h2 class=\"p\">www.entropy.ch Release %d (Universal Binary)</h2>\n", ENTROPY_CH_RELEASE);
  		} else {
  			php_info_print_table_row(2, "PHP Version", PHP_VERSION);
- 		}
+ 		}	
+Only in php-5.1.2.entropy/ext/standard: info.c.orig

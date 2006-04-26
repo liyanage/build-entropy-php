@@ -32,15 +32,15 @@ sub packagename {
 
 
 sub subpath_for_check {
-	return "lib/mysql/libmysqlclient.a";
+	return "lib/mysql/libmysqlclient.dylib";
 }
 
 
-sub install_prefix {
-	my $self = shift @_;
-	return $self->install_tmp_prefix() . "/mysql";
-}
-
+# sub install_prefix {
+# 	my $self = shift @_;
+# 	return $self->install_tmp_prefix() . "/mysql";
+# }
+# 
 
 
 sub install {
@@ -49,9 +49,9 @@ sub install {
 
 	return undef unless ($self->SUPER::install());
 
-	$self->log("removing dynamic libraries to force static link");
-	$self->shell("rm " . $self->install_prefix() . "/lib/mysql/*.dylib");
-	$self->shell("ranlib " . $self->install_prefix() . "/lib/mysql/*.a");
+# 	$self->log("removing dynamic libraries to force static link");
+# 	$self->shell("rm " . $self->install_prefix() . "/lib/mysql/*.dylib");
+# 	$self->shell("ranlib " . $self->install_prefix() . "/lib/mysql/*.a");
 
 	return 1;
 }
@@ -67,10 +67,31 @@ sub php_extension_configure_flags {
 	my $mysql_prefix = $self->config()->mysql_install_prefix();
 	die "mysql install prefix '$mysql_prefix' does not exist" unless (-d $mysql_prefix);
 
-	return "--with-mysql=$mysql_prefix --with-mysqli=$mysql_prefix/bin/mysql_config";
+	return "--with-mysql=shared,$mysql_prefix --with-mysqli=shared,$mysql_prefix/bin/mysql_config";
 
 }
 
+
+
+sub php_dso_extension_names {
+	my $self = shift @_;
+	return qw(mysql mysqli);
+}
+
+
+
+sub package_filelist {
+
+	my $self = shift @_;
+
+	return qw(
+		lib/php/extensions/no-debug-non-zts-20050922/mysqli
+		lib/php/extensions/no-debug-non-zts-20050922/mysql
+		lib/mysql/lib*.dylib
+		php.d/extension-mysql*.ini
+	);
+	
+}
 
 
 
