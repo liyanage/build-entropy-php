@@ -47,8 +47,9 @@ sub build_arch_post {
 	# used to generate the dynamic library, so we have to do that
 	# manually here, otherwise the dylib ends up empty and of the wrong
 	# architecture
+	my $prefix = $self->config()->prefix();
 	$self->cd('libs/pdflib');
-	$self->shell("cc -arch $args{arch} -dynamiclib -flat_namespace -undefined suppress -o .libs/libpdf.*.*.*.dylib ./pdflib.lo -all_load  ../../libs/pdcore/.libs/libpdcore.al ../../libs/png/.libs/libpng.al ../../libs/flate/.libs/libz.al ../../libs/tiff/.libs/libtiff.al ../../libs/jpeg/.libs/libjpeg.al ../../libs/pdflib/.libs/libpdf_.al  -lc -install_name /Users/liyanage/svn/entropy/universalbuild/install/lib/libpdf.5.dylib -compatibility_version 6 -current_version 6.3 -framework ApplicationServices");
+	$self->shell("cc -arch $args{arch} -dynamiclib -flat_namespace -undefined suppress -o .libs/libpdf.*.*.*.dylib ./pdflib.lo -all_load  ../../libs/pdcore/.libs/libpdcore.al ../../libs/png/.libs/libpng.al ../../libs/flate/.libs/libz.al ../../libs/tiff/.libs/libtiff.al ../../libs/jpeg/.libs/libjpeg.al ../../libs/pdflib/.libs/libpdf_.al  -lc -install_name '$prefix'/lib/libpdf.5.dylib -compatibility_version 6 -current_version 6.3 -framework ApplicationServices");
 
 }
 

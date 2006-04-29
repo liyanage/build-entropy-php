@@ -150,7 +150,7 @@ sub install {
 
 	$self->cd_packagesrcdir();
 	$self->shell({silent => 0}, "cat $extrasdir/dist/entropy-php.conf | sed -e 's!{prefix}!$prefix!g' > $prefix/entropy-php.conf");
-	$self->shell({silent => 0}, "cat $extrasdir/dist/resources/activate-entropy-php.py | sed -e 's!{prefix}!$prefix!g' > $prefix/bin/activate-entropy-php.py");
+	$self->shell({silent => 0}, "cat $extrasdir/dist/activate-entropy-php.py | sed -e 's!{prefix}!$prefix!g' > $prefix/bin/activate-entropy-php.py");
 	$self->shell({silent => 0}, "cp php.ini-recommended $prefix/lib/");
 	$self->shell({silent => 0}, "test -d $prefix/php.d || mkdir $prefix/php.d");
 
@@ -246,9 +246,57 @@ sub create_package {
 
 	$self->SUPER::create_package(@_);
 
+	$self->create_metapackage();
 
-	# metapackage	
 }
+
+
+sub create_metapackage {
+
+	my $self = shift @_;
+
+	$self->log("metapackaging");
+	
+#	my $dir = "/tmp/universalbuild-pkg/" . $self->shortname() . '-meta';
+	my $dst = '/tmp/' . $self->mpkg_filename();
+
+	my @sed_cmds = $self->info_substitution_sed_cmds();
+
+	my $infofile = $self->extras_path('metapackage/Info.plist');
+	$self->shell({silent => 0}, "cat $infofile @sed_cmds > $infofile.out");
+	my $descfile = $self->extras_path('metapackage/Description.plist');
+	$self->shell({silent => 0}, "cat $descfile @sed_cmds > $descfile.out");
+	my $resdir = $self->extras_path('metapackage/resources');
+
+	$self->shell({silent => 0}, "/Developer/Tools/packagemaker -build -mi '/tmp/universalbuild-pkgdst' -ds -v -r '$resdir' -i '$infofile.out' -d '$descfile.out' -p '$dst'");
+
+	my $version = $self->config()->version() . '-' . $self->config()->release();
+
+	my $xslt = $self->extras_path('metapackage/info-plist-postprocess.xslt');
+	$self->shell({silent => 0}, "xsltproc --stringparam version $version -o $dst/Contents/Info.plist.out $xslt $dst/Contents/Info.plist && mv -f $dst/Contents/Info.plist.out $dst/Contents/Info.plist"); 
+
+	$self->shell('open /tmp/');
+	
+}
+
+
+
+sub package_infofile {
+	my $self = shift @_;
+	return $self->extras_path('/package/Info.plist');
+}
+
+sub package_descfile {
+	my $self = shift @_;
+	return $self->extras_path('/package/Description.plist');
+}
+
+sub package_resdir {
+	my $self = shift @_;
+	return $self->extras_path('/package/resources');
+}
+
+
 
 sub prepackage_hook {
 
@@ -265,6 +313,12 @@ sub pkg_filename {
 	my $self = shift @_;
 	my $version = $self->config()->version() . '-' . $self->config()->release();
 	return "entropy-php-$version.pkg";
+}
+
+sub mpkg_filename {
+	my $self = shift @_;
+	my $version = $self->config()->version() . '-' . $self->config()->release();
+	return "entropy-php-$version.mpkg";
 }
 
 
