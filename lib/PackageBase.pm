@@ -82,10 +82,15 @@ sub create_package {
 	
 	my $dir = "/tmp/universalbuild-pkg/" . $self->shortname();
 	my $dst = "/tmp/universalbuild-pkgdst/" . $self->pkg_filename();
-	my $infofile = $self->extras_path('package/Info.plist');
-	my $prefix = $self->config()->prefix();
-	my $shortname = $self->shortname();
-	$self->shell({silent => 0}, "cat $infofile | sed -e 's!{prefix}!$prefix!g' | sed -e 's!{shortname}!$shortname!g' > $infofile.out");
+
+	my @sed_cmds = $self->info_substitution_sed_cmds();
+
+	my $infofile = $self->package_infofile();
+	$self->shell({silent => 0}, "cat $infofile @sed_cmds > $infofile.out");
+	my $descfile = $self->package_descfile();
+	$self->shell({silent => 0}, "cat $descfile @sed_cmds > $descfile.out");
+	my $resdir = $self->package_resdir();
+
 	
 	$self->shell("mkdir -p $dir");
 	$self->shell("rm -rf $dir/*");
@@ -95,10 +100,48 @@ sub create_package {
 
 	$self->prepackage_hook($dir);
 
-	$self->shell({silent => 0}, "/Developer/Tools/packagemaker -build -ds -v -i '$infofile.out' -p '$dst' -f '$dir'");
+	$self->shell({silent => 0}, "/Developer/Tools/packagemaker -build -ds -v -r '$resdir' -i '$infofile.out' -d '$descfile.out' -p '$dst' -f '$dir'");
 	
 
 }
+
+
+
+sub package_infofile {
+	my $self = shift @_;
+	return $self->config()->basedir() . '/extras/common/package/Info.plist';
+}
+
+sub package_descfile {
+	my $self = shift @_;
+	return $self->config()->basedir() . '/extras/common/package/Description.plist';
+}
+
+sub package_resdir {
+	my $self = shift @_;
+	return $self->config()->basedir() . '/extras/common/package/resources';
+}
+
+
+
+
+
+sub info_substitution_sed_cmds {
+
+	my $self = shift @_;
+
+	my %subs = (
+		version   => $self->config()->version(),
+		release   => $self->config()->release(),
+		prefix    => $self->config()->prefix(),
+		shortname => $self->shortname(),
+	);
+
+	return map {"| sed -e 's!{$_}!$subs{$_}!g'"} keys(%subs);
+
+}
+
+
 
 
 sub prepackage_hook {
