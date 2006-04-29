@@ -3,11 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleIdentifier</key>
-	<string>ch.entropy.php</string>
+	<string>ch.entropy.php.extension.{shortname}</string>
 	<key>CFBundleName</key>
-	<string>Entropy PHP</string>
+	<string>Entropy PHP {shortname} Extension</string>
 	<key>CFBundleGetInfoString</key>
-	<string>Entropy PHP {version}-{release}</string>
+	<string>Entropy PHP Extension {shortname} {version}-{release}</string>
 	<key>CFBundleShortVersionString</key>
 	<string>{version}</string>
 	<key>IFPkgFlagAuthorizationAction</key>
