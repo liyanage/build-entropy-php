@@ -314,7 +314,6 @@ sub make_command {
 }
 
 
-
 sub configure_flags {
 	my $self = shift @_;
 	return "--prefix=" . $self->install_prefix();

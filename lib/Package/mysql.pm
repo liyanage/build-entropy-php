@@ -7,8 +7,6 @@ use base qw(PackageSplice);
 
 our $VERSION = '5.0.19';
 
-# use disable-shared 
-
 sub init {
 
 	my $self = shift @_;
@@ -56,6 +54,10 @@ sub install {
 	return 1;
 }
 
+sub make_command {
+	my $self = shift @_;
+	return $self->SUPER::make_command() . " -j 1"
+}
 
 
 
@@ -67,7 +69,7 @@ sub php_extension_configure_flags {
 	my $mysql_prefix = $self->config()->mysql_install_prefix();
 	die "mysql install prefix '$mysql_prefix' does not exist" unless (-d $mysql_prefix);
 
-	return "--with-mysql=shared,$mysql_prefix --with-mysqli=shared,$mysql_prefix/bin/mysql_config";
+	return "--with-mysql=shared,$mysql_prefix --with-mysqli=shared,$mysql_prefix/bin/mysql_config --with-pdo-mysql=shared,$mysql_prefix";
 
 }
 
@@ -75,7 +77,7 @@ sub php_extension_configure_flags {
 
 sub php_dso_extension_names {
 	my $self = shift @_;
-	return qw(mysql mysqli);
+	return qw(mysql mysqli pdo_mysql);
 }
 
 
@@ -85,10 +87,11 @@ sub package_filelist {
 	my $self = shift @_;
 
 	return qw(
-		lib/php/extensions/no-debug-non-zts-20050922/mysqli
 		lib/php/extensions/no-debug-non-zts-20050922/mysql
+		lib/php/extensions/no-debug-non-zts-20050922/mysqli
+		lib/php/extensions/no-debug-non-zts-20050922/pdo_mysql
 		lib/mysql/lib*.dylib
-		php.d/extension-mysql*.ini
+		php.d/extension-*mysql*.ini
 	);
 	
 }

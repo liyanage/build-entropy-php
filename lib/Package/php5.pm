@@ -23,7 +23,7 @@ sub packagename {
 
 sub dependency_names {
 	return qw(curl mysql libxml2 libxslt pdflib oracleinstantclient
-		imapcclient libjpeg libpng libfreetype iodbc);
+		imapcclient libjpeg libpng libfreetype iodbc postgresql t1lib);
 }
 
 
@@ -67,29 +67,49 @@ sub configure_flags {
 }
 
 
+#         --with-pdflib=$(INSTDIR) \
+
+#         --with-t1lib=$(INSTDIR) \
+#         --with-imap=../imap-2002d \
+#         --with-imap-ssl=/usr \
+#         --with-gettext=$(INSTDIR) \
+#         --with-ming=$(MING_INSTDIR) \
+#         --with-ldap     \
+#         --with-mime-magic=$(INSTDIR)/etc/magic.mime \
+#         --with-iodbc=/usr \
+#         --with-xmlrpc \
+#         --with-expat-dir=$(INSTDIR) \
+#         --with-iconv-dir=/usr \
+#         --with-curl=$(INSTDIR) \
+#         --enable-exif \
+#         --enable-wddx \
+#         --enable-soap \
+#         --enable-sqlite-utf8 \
+#         --enable-ftp \
+#         --enable-sockets \
+#         --enable-dbx \
+#         --enable-dbase \
+#         --enable-mbstring \
+#         --enable-calendar \
+#         --with-bz2=/usr \
+#         --with-mcrypt=$(INSTDIR) \
+#         --with-mhash=$(INSTDIR) \
+#         --with-mssql=$(INSTDIR) \
+#         --with-fbsql=$(FRONTBASE_INSTDIR)/Library/FrontBase \
+#         --enable-openbase_module
+#  
+#         cd $(SRCDIR)/php-*/ && $(MAKE)
+# 
+# 
+# 
+
+
+
 
 sub dependency_extension_flags {
 
 	my $self = shift @_;
 	my (%args) = @_;
-
-#	my $prefix = $self->config()->prefix();
-
-# 	my $mysql_prefix = $self->config()->mysql_install_prefix();
-# 	die "mysql install prefix '$mysql_prefix' does not exist" unless (-d $mysql_prefix);
-
-#	my %map = (
-#		curl                => "--with-curl=shared,$prefix",
-#		mysql               => "--with-mysql=$mysql_prefix --with-mysqli=$mysql_prefix/bin/mysql_config",
-#		libxml2             => "--with-libxml-dir=shared,$prefix",
-#		libxslt             => "--with-xsl=shared,$prefix",
-#		pdflib              => "--with-pdflib=shared,$prefix",
-#		imapcclient         => "--with-imap=../imap-2004g --with-kerberos=/usr --with-imap-ssl=/usr",
-#		libjpeg             => "--with-jpeg-dir=$prefix",
-#		libpng              => "--with-png-dir=$prefix",
-#		libfreetype         => "--with-freetype-dir=$prefix --enable-gd-native-ttf",
-#		oracleinstantclient => "--with-oci8=shared,instantclient,$prefix/oracle --with-pdo-oci=shared,instantclient,$prefix/oracle,10.1.0.3",
-#	);
 
 	return map {$_->php_extension_configure_flags()} grep {$_->supports_arch($args{arch})} $self->dependencies();
 
@@ -149,10 +169,12 @@ sub install {
 	$self->shell({silent => 0}, "cat $extrasdir/dist/entropy-php.conf | sed -e 's!{prefix}!$prefix!g' > $prefix/entropy-php.conf");
 	$self->shell({silent => 0}, "cat $extrasdir/dist/activate-entropy-php.py | sed -e 's!{prefix}!$prefix!g' > $prefix/bin/activate-entropy-php.py");
 	$self->shell({silent => 0}, "cp php.ini-recommended $prefix/lib/");
-	$self->shell({silent => 0}, qq!sed -e sed -e 's#"[^"]*$prefix\\([^"]*\\)#"$prefix\\1"#g' < $prefix/etc/pear.conf > $prefix/etc/pear.conf.default!);
-	$self->shell({silent => 0}, "rm $prefix/etc/pear.conf");
+	unless (-e "$prefix/etc/pear.conf.default") {
+		$self->shell({silent => 0}, qq!sed -e 's#"[^"]*$prefix\\([^"]*\\)#"$prefix\\1"#g' < $prefix/etc/pear.conf > $prefix/etc/pear.conf.default!);
+		$self->shell({silent => 0}, "rm $prefix/etc/pear.conf");
+	}
 	$self->shell({silent => 0}, "test -d $prefix/php.d || mkdir $prefix/php.d");
-	$self->shell({slient => 0}, "perl -p -i -e 's# -L\S+c-client##' $prefix/bin/php-config");
+	$self->shell({slient => 0}, "perl -p -i -e 's# -L\\S+c-client##' $prefix/bin/php-config");
 
 	$self->create_dso_ini_files();
 
@@ -219,7 +241,7 @@ sub package_filelist {
 
 	return qw(
 		entropy-php.conf libphp5.so etc/pear.conf.default lib/libxml2*.dylib lib/libpng*.dylib
-		lib/libfreetype*.dylib bin/php* bin/activate-* lib/php include/php
+		lib/libfreetype*.dylib lib/libt1*.dylib bin/php* bin/activate-* lib/php/.[a-z]* include/php
 	);
 	
 }
