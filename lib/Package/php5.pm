@@ -23,7 +23,8 @@ sub packagename {
 
 sub dependency_names {
 	return qw(curl mysql libxml2 libxslt pdflib oracleinstantclient
-		imapcclient libjpeg libpng libfreetype iodbc postgresql t1lib);
+		imapcclient libjpeg libpng libfreetype iodbc postgresql t1lib
+		gettext);
 }
 
 
@@ -69,9 +70,6 @@ sub configure_flags {
 
 #         --with-pdflib=$(INSTDIR) \
 
-#         --with-t1lib=$(INSTDIR) \
-#         --with-imap=../imap-2002d \
-#         --with-imap-ssl=/usr \
 #         --with-gettext=$(INSTDIR) \
 #         --with-ming=$(MING_INSTDIR) \
 #         --with-ldap     \
@@ -241,7 +239,7 @@ sub package_filelist {
 
 	return qw(
 		entropy-php.conf libphp5.so etc/pear.conf.default lib/libxml2*.dylib lib/libpng*.dylib
-		lib/libfreetype*.dylib lib/libt1*.dylib bin/php* bin/activate-* lib/php/.[a-z]* include/php
+		lib/libfreetype*.dylib lib/libt1*.dylib bin/php* bin/activate-* lib/php/.[a-z]* lib/php.ini-recommended include/php
 	);
 	
 }
