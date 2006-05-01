@@ -34,7 +34,7 @@ sub subpath_for_check {
 sub configure_flags {
 	my $self = shift @_;
 	
-	return $self->SUPER::configure_flags() . " --with-python --with-libxml-prefix=" . $self->install_prefix();
+	return $self->SUPER::configure_flags() . " --with-libxml-prefix=" . $self->install_prefix();
 
 }
 

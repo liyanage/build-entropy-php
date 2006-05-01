@@ -21,6 +21,13 @@ sub packagename {
 }
 
 
+sub configure_flags {
+	my $self = shift @_;
+	
+	return $self->SUPER::configure_flags() . " --without-python";
+
+}
+
 
 sub subpath_for_check {
 	return "lib/libxml2.dylib";

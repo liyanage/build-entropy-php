@@ -145,14 +145,14 @@ sub install {
 	my $extrasdir = $self->extras_dir();
 	my $prefix = $self->config()->prefix();
 
-
-#	$self->install_cleanup();
-
 	$self->cd_packagesrcdir();
 	$self->shell({silent => 0}, "cat $extrasdir/dist/entropy-php.conf | sed -e 's!{prefix}!$prefix!g' > $prefix/entropy-php.conf");
 	$self->shell({silent => 0}, "cat $extrasdir/dist/activate-entropy-php.py | sed -e 's!{prefix}!$prefix!g' > $prefix/bin/activate-entropy-php.py");
 	$self->shell({silent => 0}, "cp php.ini-recommended $prefix/lib/");
+	$self->shell({silent => 0}, qq!sed -e sed -e 's#"[^"]*$prefix\\([^"]*\\)#"$prefix\\1"#g' < $prefix/etc/pear.conf > $prefix/etc/pear.conf.default!);
+	$self->shell({silent => 0}, "rm $prefix/etc/pear.conf");
 	$self->shell({silent => 0}, "test -d $prefix/php.d || mkdir $prefix/php.d");
+	$self->shell({slient => 0}, "perl -p -i -e 's# -L\S+c-client##' $prefix/bin/php-config");
 
 	$self->create_dso_ini_files();
 
@@ -166,22 +166,10 @@ sub create_dso_ini_files {
 
 	my @dso_names = grep {$_} map {$_->php_dso_extension_names()} $self->dependencies();
 	my $prefix = $self->config()->prefix();
-	$self->shell({silent => 0}, "echo 'extension=$_' > $prefix/php.d/extension-$_.ini") foreach (@dso_names);
+	$self->shell({silent => 0}, "echo 'extension=$_' > $prefix/php.d/50-extension-$_.ini") foreach (@dso_names);
+	$self->shell({silent => 0}, qq!echo 'extension_dir=$prefix/lib/php/extensions/no-debug-non-zts-20050922' > $prefix/php.d/10-extension_dir.ini!);
 
 }
-
-
-
-sub install_cleanup {
-
-	my $self = shift @_;
-
-	my $prefix = $self->config()->prefix();
-
-	$self->shell({fatal => 0}, "rm $prefix/lib/php/extensions/*/*.a");
-
-}
-
 
 
 
@@ -230,8 +218,8 @@ sub package_filelist {
 	my $self = shift @_;
 
 	return qw(
-		entropy-php.conf libphp5.so etc lib/libxml2*.dylib lib/libpng*.dylib
-		lib/libfreetype*.dylib bin/php* bin/activate-* lib/php.ini-recommended
+		entropy-php.conf libphp5.so etc/pear.conf.default lib/libxml2*.dylib lib/libpng*.dylib
+		lib/libfreetype*.dylib bin/php* bin/activate-* lib/php include/php
 	);
 	
 }
