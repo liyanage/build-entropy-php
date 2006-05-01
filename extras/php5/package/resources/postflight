@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# http://developer.apple.com/documentation/DeveloperTools/Conceptual/SoftwareDistribution/Concepts/sd_pre_post_processing.html
+
+echo running activate script for Entropy PHP
+python $2/bin/activate-entropy-php.py
+
+
+
