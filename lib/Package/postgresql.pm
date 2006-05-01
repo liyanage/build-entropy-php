@@ -80,7 +80,7 @@ sub package_filelist {
 		lib/php/extensions/no-debug-non-zts-20050922/pgsql
 		lib/libpgtypes*.dylib
 		lib/libpq*.dylib
-		php.d/extension-*pgsql*.ini
+		php.d/50-extension-*pgsql*.ini
 	);
 	
 }

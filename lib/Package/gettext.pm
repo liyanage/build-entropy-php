@@ -55,7 +55,7 @@ sub package_filelist {
 	return qw(
 		lib/php/extensions/no-debug-non-zts-20050922/gettext
 		lib/libgettext*.dylib lib/libasprintf*.dylib lib/libintl*.dylib
-		php.d/extension-gettext.ini share/gettext);
+		php.d/50-extension-gettext.ini share/gettext);
 	
 }
 

@@ -91,7 +91,7 @@ sub package_filelist {
 		lib/php/extensions/no-debug-non-zts-20050922/mysqli
 		lib/php/extensions/no-debug-non-zts-20050922/pdo_mysql
 		lib/mysql/lib*.dylib
-		php.d/extension-*mysql*.ini
+		php.d/50-extension-*mysql*.ini
 	);
 	
 }

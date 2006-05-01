@@ -238,8 +238,10 @@ sub package_filelist {
 	my $self = shift @_;
 
 	return qw(
-		entropy-php.conf libphp5.so etc/pear.conf.default lib/libxml2*.dylib lib/libpng*.dylib
-		lib/libfreetype*.dylib lib/libt1*.dylib bin/php* bin/activate-* lib/php/.[a-z]* lib/php.ini-recommended include/php
+		entropy-php.conf libphp5.so etc/pear.conf.default
+		lib/libxml2*.dylib lib/libpng*.dylib lib/libfreetype*.dylib lib/libt1*.dylib
+		bin/php* bin/activate-* lib/php/.[a-z]* lib/php.ini-recommended include/php
+		php.d/10-extension_dir.ini
 	);
 	
 }
