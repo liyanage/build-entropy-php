@@ -3,10 +3,9 @@ package Package::php5;
 use strict;
 use warnings;
 
+use IO::File;
+
 use base qw(PackageSplice);
-
-our $RELEASE = 4;
-
 
 
 
@@ -24,7 +23,7 @@ sub packagename {
 sub dependency_names {
 	return qw(curl mysql libxml2 libxslt pdflib oracleinstantclient
 		imapcclient libjpeg libpng libfreetype iodbc postgresql t1lib
-		gettext);
+		gettext ming mcrypt mhash mssql frontbase);
 }
 
 
@@ -33,10 +32,21 @@ sub subpath_for_check {
 }
 
 
+# broken ming build setup can not handle distclean target
+sub cleanup_srcdir {
+	my $self = shift @_;
+	$self->cd_srcdir();
+	$self->shell("rm -rf php-*");
+	$self->unpack();
+}
+
+
 sub configure_flags {
 	my $self = shift @_;
 	my %args = @_;
 	my $prefix = $self->config()->prefix();
+
+	# mime-magic not ported from old distribution because it is deprecated
 
 	my @extension_flags = (
 		"--with-config-file-scan-dir=$prefix/php.d",
@@ -67,39 +77,12 @@ sub configure_flags {
 	
 }
 
+#http://www.frontbase.com/download/Download_4.2.4/MacOSX-10.4u/FrontBase-MacOSX-4.2.4.dmg
 
 #         --with-pdflib=$(INSTDIR) \
 
-#         --with-gettext=$(INSTDIR) \
-#         --with-ming=$(MING_INSTDIR) \
-#         --with-ldap     \
-#         --with-mime-magic=$(INSTDIR)/etc/magic.mime \
-#         --with-iodbc=/usr \
-#         --with-xmlrpc \
-#         --with-expat-dir=$(INSTDIR) \
-#         --with-iconv-dir=/usr \
-#         --with-curl=$(INSTDIR) \
-#         --enable-exif \
-#         --enable-wddx \
-#         --enable-soap \
-#         --enable-sqlite-utf8 \
-#         --enable-ftp \
-#         --enable-sockets \
-#         --enable-dbx \
-#         --enable-dbase \
-#         --enable-mbstring \
-#         --enable-calendar \
-#         --with-bz2=/usr \
-#         --with-mcrypt=$(INSTDIR) \
-#         --with-mhash=$(INSTDIR) \
-#         --with-mssql=$(INSTDIR) \
 #         --with-fbsql=$(FRONTBASE_INSTDIR)/Library/FrontBase \
 #         --enable-openbase_module
-#  
-#         cd $(SRCDIR)/php-*/ && $(MAKE)
-# 
-# 
-# 
 
 
 
@@ -120,13 +103,24 @@ sub build_arch_pre {
 	my $self = shift @_;
 	my (%args) = @_;
 
+	# replace pdflib extension module source with newer version
 	$self->cd('ext');
 	$self->shell("rm -rf pdf");
 	my $pdflib_extension_tarball = $self->extras_dir() . "/pdflib-2.0.5.tgz";
 	die "pdflib extensions tarball '$pdflib_extension_tarball' does not exist" unless (-f $pdflib_extension_tarball);
-
 	$self->shell("tar -xzvf $pdflib_extension_tarball");
 	$self->shell("mv pdflib-2.*.* pdf; rm package.xml");
+
+	# replace pdo_mysql extension module source with newer version
+# 	my $pdo_mysql_tarball = $self->config()->downloaddir() . "/PDO_MYSQL-1.0.2.tgz";
+# 	if (! -e $pdo_mysql_tarball) {
+# 		$self->shell("curl -o $pdo_mysql_tarball http://pecl.php.net/get/PDO_MYSQL-1.0.2.tgz");
+# 	}
+# 	$self->cd_packagesrcdir();
+# 	$self->cd('ext');
+# 	$self->shell("rm -rf pdo_mysql");
+# 	$self->shell("tar -xzvf $pdo_mysql_tarball");
+# 	$self->shell("mv PDO_MYSQL-1.0.2 pdo_mysql; rm package.xml package2.xml");
 
 	$self->cd_packagesrcdir();
 	$self->shell("aclocal");
@@ -147,7 +141,7 @@ sub make_install_arch {
 
 	my $install_override = $self->make_install_override_list(prefix => $args{prefix});
 
-	$self->shell($self->make_command() . " $install_override install-$_") foreach qw(cli pear build headers programs modules);
+	$self->shell($self->make_command() . " $install_override install-$_") foreach qw(cli build headers programs modules);
 	$self->shell("cp libs/libphp5.so $args{prefix}");
 
 }
@@ -163,13 +157,16 @@ sub install {
 	my $extrasdir = $self->extras_dir();
 	my $prefix = $self->config()->prefix();
 
+
 	$self->cd_packagesrcdir();
 	$self->shell({silent => 0}, "cat $extrasdir/dist/entropy-php.conf | sed -e 's!{prefix}!$prefix!g' > $prefix/entropy-php.conf");
 	$self->shell({silent => 0}, "cat $extrasdir/dist/activate-entropy-php.py | sed -e 's!{prefix}!$prefix!g' > $prefix/bin/activate-entropy-php.py");
 	$self->shell({silent => 0}, "cp php.ini-recommended $prefix/lib/");
 	unless (-e "$prefix/etc/pear.conf.default") {
-		$self->shell({silent => 0}, qq!sed -e 's#"[^"]*$prefix\\([^"]*\\)#"$prefix\\1"#g' < $prefix/etc/pear.conf > $prefix/etc/pear.conf.default!);
-		$self->shell({silent => 0}, "rm $prefix/etc/pear.conf");
+		$self->shell($self->make_command(), "install-pear");
+#		$self->shell({silent => 0}, qq!sed -e 's#"[^"]*$prefix\\([^"]*\\)#"$prefix\\1"#g' < $prefix/etc/pear.conf > $prefix/etc/pear.conf.default!);
+#		$self->shell({silent => 0}, "rm $prefix/etc/pear.conf");
+		$self->shell({silent => 0}, "mv $prefix/etc/pear.conf $prefix/etc/pear.conf.default");
 	}
 	$self->shell({silent => 0}, "test -d $prefix/php.d || mkdir $prefix/php.d");
 	$self->shell({slient => 0}, "perl -p -i -e 's# -L\\S+c-client##' $prefix/bin/php-config");
@@ -186,7 +183,7 @@ sub create_dso_ini_files {
 
 	my @dso_names = grep {$_} map {$_->php_dso_extension_names()} $self->dependencies();
 	my $prefix = $self->config()->prefix();
-	$self->shell({silent => 0}, "echo 'extension=$_' > $prefix/php.d/50-extension-$_.ini") foreach (@dso_names);
+	$self->shell({silent => 0}, "echo 'extension=$_.so' > $prefix/php.d/50-extension-$_.ini") foreach (@dso_names);
 	$self->shell({silent => 0}, qq!echo 'extension_dir=$prefix/lib/php/extensions/no-debug-non-zts-20050922' > $prefix/php.d/10-extension_dir.ini!);
 
 }
@@ -238,9 +235,14 @@ sub package_filelist {
 	my $self = shift @_;
 
 	return qw(
-		entropy-php.conf libphp5.so etc/pear.conf.default
+		entropy-php.conf
+		libphp5.so
+		etc/pear.conf.default
 		lib/libxml2*.dylib lib/libpng*.dylib lib/libfreetype*.dylib lib/libt1*.dylib
-		bin/php* bin/activate-* lib/php/.[a-z]* lib/php.ini-recommended include/php
+		bin/php* bin/pear bin/pecl bin/peardev bin/activate-*
+		lib/php
+		lib/php.ini-recommended
+		include/php
 		php.d/10-extension_dir.ini
 	);
 	

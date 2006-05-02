@@ -53,9 +53,10 @@ sub package_filelist {
 	my $self = shift @_;
 
 	return qw(
-		lib/php/extensions/no-debug-non-zts-20050922/gettext
+		lib/php/extensions/no-debug-non-zts-20050922/gettext.so
 		lib/libgettext*.dylib lib/libasprintf*.dylib lib/libintl*.dylib
-		php.d/50-extension-gettext.ini share/gettext);
+		php.d/50-extension-gettext.ini share/gettext
+	);
 	
 }
 

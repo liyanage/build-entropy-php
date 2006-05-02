@@ -373,6 +373,17 @@ sub cflags {
 }
 
 
+sub ldflags {
+
+	my $self = shift @_;
+
+	return '';
+	
+}
+
+
+
+
 sub install_prefix {
 
 	my $self = shift @_;

@@ -34,7 +34,7 @@ sub package_filelist {
 
 	my $self = shift @_;
 
-	return qw(lib/php/extensions/no-debug-non-zts-20050922/odbc php.d/extension-odbc.ini);
+	return qw(lib/php/extensions/no-debug-non-zts-20050922/odbc.so php.d/50-extension-odbc.ini);
 	
 }
 

@@ -1,29 +1,27 @@
-package Package::curl;
+package Package::mhash;
 
 use strict;
 use warnings;
 
 use base qw(PackageSplice);
 
-our $VERSION = '7.15.1';
-
-
+our $VERSION = '0.9.6';
 
 
 
 sub base_url {
-	return "http://curl.haxx.se/download";
+	return "http://switch.dl.sourceforge.net/sourceforge/mhash";
 }
 
 
 sub packagename {
-	return "curl-" . $VERSION;
+	return "mhash-" . $VERSION;
 }
 
 
 
 sub subpath_for_check {
-	return "lib/libcurl.dylib";
+	return "lib/libmhash.dylib";
 }
 
 
@@ -33,7 +31,7 @@ sub php_extension_configure_flags {
 	my $self = shift @_;
 	my (%args) = @_;
 
-	return "--with-curl=shared," . $self->config()->prefix();
+	return "--with-mhash=shared," . $self->config()->prefix();
 
 }
 
@@ -48,14 +46,15 @@ sub php_dso_extension_names {
 
 
 
-
-
-
 sub package_filelist {
 
 	my $self = shift @_;
 
-	return qw(lib/php/extensions/no-debug-non-zts-20050922/curl.so lib/libcurl*.dylib php.d/50-extension-curl.ini share/curl);
+	return qw(
+		lib/php/extensions/no-debug-non-zts-20050922/mhash.so
+		lib/libmhash*.dylib
+		php.d/50-extension-mhash.ini
+	);
 	
 }
 

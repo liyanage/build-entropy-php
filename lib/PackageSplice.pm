@@ -65,13 +65,24 @@ sub build_arch {
 	my (%args) = @_;
 
 	my $cflags = $self->cflags();
+	my $ldflags = $self->ldflags();
 
+	$self->cleanup_srcdir() if (-e "Makefile");
 	$self->cd_packagesrcdir();
-	$self->shell({fatal => 0}, 'make distclean') if (-e "Makefile");
-	$self->shell("CFLAGS='$cflags' CC='cc -arch $args{arch}' CXX='c++ -arch $args{arch}' ./configure " . $self->configure_flags(arch => $args{arch}));
+	$self->shell("CFLAGS='$cflags' LDFLAGS='$ldflags' CC='cc -arch $args{arch}' CXX='c++ -arch $args{arch}' ./configure " . $self->configure_flags(arch => $args{arch}));
 	$self->build_arch_make(%args);
 
 }
+
+
+sub cleanup_srcdir {
+
+	my $self = shift @_;
+	$self->cd_packagesrcdir();
+	$self->shell({fatal => 0}, 'make distclean');
+
+}
+
 
 
 sub build_arch_make {

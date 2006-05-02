@@ -87,9 +87,9 @@ sub package_filelist {
 	my $self = shift @_;
 
 	return qw(
-		lib/php/extensions/no-debug-non-zts-20050922/mysql
-		lib/php/extensions/no-debug-non-zts-20050922/mysqli
-		lib/php/extensions/no-debug-non-zts-20050922/pdo_mysql
+		lib/php/extensions/no-debug-non-zts-20050922/mysql.so
+		lib/php/extensions/no-debug-non-zts-20050922/mysqli.so
+		lib/php/extensions/no-debug-non-zts-20050922/pdo_mysql.so
 		lib/mysql/lib*.dylib
 		php.d/50-extension-*mysql*.ini
 	);

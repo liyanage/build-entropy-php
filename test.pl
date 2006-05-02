@@ -17,8 +17,8 @@ my $config = Config->new(
 	pdflib_lite          => 1,
 	mysql_install_prefix => undef,
 	cpus                 => 2,
-	version              => '5.1.2',
-	release              => 6,
+	version              => '5.1.3',
+	release              => 1,
 );
 
 my $php5 = Package::php5->new(config => $config);
