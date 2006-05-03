@@ -219,9 +219,7 @@ sub unpack {
 	$self->shell("grep -q ENTROPY_CH ext/standard/info.c || patch -p1 < $patchfile");
 
 	# temporary fix until php 5.1.4
-	$self->cd('main');
-	$self->shell("patch < $patchfile_37276");
-	$self->cd_packagesrcdir();
+	$self->shell("cd main && patch < $patchfile_37276");
 	# end temporary fix
 
 	$self->cd("ext");
