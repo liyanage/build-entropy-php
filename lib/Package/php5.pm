@@ -4,6 +4,7 @@ use strict;
 use warnings;
 
 use IO::File;
+use IO::Dir;
 
 use base qw(PackageSplice);
 
@@ -144,6 +145,8 @@ sub make_install_arch {
 	$self->shell($self->make_command() . " $install_override install-$_") foreach qw(cli build headers programs modules);
 	$self->shell("cp libs/libphp5.so $args{prefix}");
 
+	$self->shell("rm $args{prefix}/lib/php/extensions/*/*.a");
+
 }
 
 
@@ -183,7 +186,7 @@ sub create_dso_ini_files {
 
 	my @dso_names = grep {$_} map {$_->php_dso_extension_names()} $self->dependencies();
 	my $prefix = $self->config()->prefix();
-	$self->shell({silent => 0}, "echo 'extension=$_.so' > $prefix/php.d/50-extension-$_.ini") foreach (@dso_names);
+	$self->shell({silent => 0}, "echo 'extension=$_' > $prefix/php.d/50-extension-$_.ini") foreach (@dso_names);
 	$self->shell({silent => 0}, qq!echo 'extension_dir=$prefix/lib/php/extensions/no-debug-non-zts-20050922' > $prefix/php.d/10-extension_dir.ini!);
 
 }
@@ -209,10 +212,18 @@ sub unpack {
 	$self->SUPER::unpack();
 
 	my $patchfile = $self->extras_path('php-entropy.patch');
+	my $patchfile_37276 = $self->extras_path('php-bug-37276-fix.patch');
 	my $mingtarball = $self->extras_path('ming.tar.gz');
 	
 	$self->cd_packagesrcdir();
 	$self->shell("grep -q ENTROPY_CH ext/standard/info.c || patch -p1 < $patchfile");
+
+	# temporary fix until php 5.1.4
+	$self->cd('main');
+	$self->shell("patch < $patchfile_37276");
+	$self->cd_packagesrcdir();
+	# end temporary fix
+
 	$self->cd("ext");
 	$self->shell("tar -xzf $mingtarball");
 

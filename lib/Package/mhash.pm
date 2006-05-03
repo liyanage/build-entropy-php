@@ -51,7 +51,7 @@ sub package_filelist {
 	my $self = shift @_;
 
 	return qw(
-		lib/php/extensions/no-debug-non-zts-20050922/mhash.so
+		lib/php/extensions/no-debug-non-zts-20050922/mhash
 		lib/libmhash*.dylib
 		php.d/50-extension-mhash.ini
 	);

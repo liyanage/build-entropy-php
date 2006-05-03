@@ -55,7 +55,7 @@ sub package_filelist {
 
 	my $self = shift @_;
 
-	return qw(lib/php/extensions/no-debug-non-zts-20050922/curl.so lib/libcurl*.dylib php.d/50-extension-curl.ini share/curl);
+	return qw(lib/php/extensions/no-debug-non-zts-20050922/curl lib/libcurl*.dylib php.d/50-extension-curl.ini share/curl);
 	
 }
 

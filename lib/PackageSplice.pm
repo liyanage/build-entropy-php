@@ -35,6 +35,8 @@ sub build {
 	foreach my $arch (qw(i386 ppc)) {
 		
 		$self->cd_packagesrcdir();
+		$self->cleanup_srcdir() if (-e "Makefile");
+		$self->cd_packagesrcdir();
 		$self->build_arch_pre(arch => $arch);
 
 		$self->build_arch(arch => $arch);
@@ -66,8 +68,6 @@ sub build_arch {
 
 	my $cflags = $self->cflags();
 	my $ldflags = $self->ldflags();
-
-	$self->cleanup_srcdir() if (-e "Makefile");
 	$self->cd_packagesrcdir();
 	$self->shell("CFLAGS='$cflags' LDFLAGS='$ldflags' CC='cc -arch $args{arch}' CXX='c++ -arch $args{arch}' ./configure " . $self->configure_flags(arch => $args{arch}));
 	$self->build_arch_make(%args);

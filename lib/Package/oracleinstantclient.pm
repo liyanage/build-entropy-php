@@ -141,7 +141,7 @@ sub package_filelist {
 
 	my $self = shift @_;
 
-	return qw(lib/php/extensions/no-debug-non-zts-20050922/oci8.so lib/php/extensions/no-debug-non-zts-20050922/pdo_oci.so oracle/lib* php.d/50-extension-*oci*.ini);
+	return qw(lib/php/extensions/no-debug-non-zts-20050922/oci8 lib/php/extensions/no-debug-non-zts-20050922/pdo_oci oracle/lib* php.d/50-extension-*oci*.ini);
 	
 }
 

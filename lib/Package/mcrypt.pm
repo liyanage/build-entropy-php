@@ -26,6 +26,14 @@ sub subpath_for_check {
 }
 
 
+sub build_arch_pre {
+
+	if (-e "/usr/lib/libltdl.dylib") {
+		die "/usr/lib/libltdl.dylib is present on this system but will be missing on target systems, please move it aside. died";
+	}
+
+}
+
 
 sub php_extension_configure_flags {
 
@@ -52,7 +60,7 @@ sub package_filelist {
 	my $self = shift @_;
 
 	return qw(
-		lib/php/extensions/no-debug-non-zts-20050922/mcrypt.so
+		lib/php/extensions/no-debug-non-zts-20050922/mcrypt
 		lib/libmcrypt*.dylib
 		php.d/50-extension-mcrypt.ini
 	);
