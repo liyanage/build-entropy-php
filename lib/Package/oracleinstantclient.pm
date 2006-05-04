@@ -147,5 +147,23 @@ sub package_filelist {
 
 
 
+sub package_resdir {
+
+	my $self = shift @_;
+
+	my $default_resdir = $self->SUPER::package_resdir();
+	my $own_resdir = $self->extras_path("package/resources");
+
+	my $dir = "/tmp/universalbuild-oracle-resources/";
+	$self->shell("mkdir -p $dir");
+	$self->shell("cp -R $default_resdir/* $dir/");
+	$self->shell("cp -R $own_resdir/* $dir/");
+
+	return $dir;
+
+}
+
+
+
 
 1;

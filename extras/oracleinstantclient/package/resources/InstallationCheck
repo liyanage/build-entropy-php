@@ -1,0 +1,15 @@
+#!/bin/sh
+
+ARCH=`arch`
+
+echo InstallationCheck for oracle, only accepting ppc hosts, this host is $ARCH
+
+if [ $ARCH = ppc ]; then
+	echo accepted
+	exit 0
+fi
+
+echo rejected
+exit 64
+
+

@@ -4,6 +4,7 @@
 
 <xsl:param name="version"/>
 <xsl:variable name="mainpackage" select="concat('entropy-php-', $version, '.pkg')" />
+<xsl:variable name="pdflib_commercial_package" select="concat('entropy-php-', $version, '-extension-pdflib_commercial.pkg')" />
 
 <xsl:output method="xml" version="1.0" encoding="utf-8" indent="yes"/>
 
@@ -18,6 +19,7 @@
 	<string>
 	<xsl:choose>
 		<xsl:when test="preceding-sibling::string[. = $mainpackage]">required</xsl:when>
+		<xsl:when test="preceding-sibling::string[. = $pdflib_commercial_package]">unselected</xsl:when>
 		<xsl:otherwise>selected</xsl:otherwise>
 	</xsl:choose>
 	</string>

@@ -22,7 +22,7 @@ sub packagename {
 
 
 sub dependency_names {
-	return qw(curl mysql libxml2 libxslt pdflib oracleinstantclient
+	return qw(curl mysql libxml2 libxslt pdflib pdflib_commercial oracleinstantclient
 		imapcclient libjpeg libpng libfreetype iodbc postgresql t1lib
 		gettext ming mcrypt mhash mssql frontbase);
 }
@@ -212,14 +212,14 @@ sub unpack {
 	$self->SUPER::unpack();
 
 	my $patchfile = $self->extras_path('php-entropy.patch');
-	my $patchfile_37276 = $self->extras_path('php-bug-37276-fix.patch');
 	my $mingtarball = $self->extras_path('ming.tar.gz');
 	
 	$self->cd_packagesrcdir();
 	$self->shell("grep -q ENTROPY_CH ext/standard/info.c || patch -p1 < $patchfile");
 
 	# temporary fix until php 5.1.4
-	$self->shell("cd main && patch < $patchfile_37276");
+#	my $patchfile_37276 = $self->extras_path('php-bug-37276-fix.patch');
+#	$self->shell("cd main && patch < $patchfile_37276");
 	# end temporary fix
 
 	$self->cd("ext");
