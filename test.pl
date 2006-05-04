@@ -18,7 +18,7 @@ my $config = Config->new(
 	mysql_install_prefix => undef,
 	cpus                 => 2,
 	version              => '5.1.4',
-	release              => 1,
+	release              => 2,
 );
 
 my $php5 = Package::php5->new(config => $config);

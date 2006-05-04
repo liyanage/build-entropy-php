@@ -95,9 +95,12 @@ sub download {
 	
 	return if ($self->is_downloaded());
 	my @files = $self->oracle_files();
-	die "You must download the oracle instant client libraries manually\nWe expect the files @files in the download directory " . $self->config()->downloaddir() . "\n";
+	$self->log("You must download the oracle instant client libraries manually");
+	$self->log("http://www.oracle.com/technology/software/tech/oci/instantclient/htdocs/macsoft.html");
+	$self->log("http://download.oracle.com/otn/mac/instantclient/instantclient-basic-macosx-10.1.0.3.zip");
+	$self->log("We expect the files @files in the download directory " . $self->config()->downloaddir());
+	die "oracle libs not found, died";
 }
-
 
 sub oracle_files {
 
