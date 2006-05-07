@@ -84,6 +84,21 @@ sub php_dso_extension_names {
 
 
 
+sub php_build_arch_pre {
+
+	my $self = shift @_;
+	my (%args) = @_;
+
+	# replace pdflib extension module source with newer version
+	$self->shell("rm -rf pdf");
+	my $pdflib_extension_tarball = $self->extras_dir() . "/pdflib-2.0.5.tgz";
+	die "pdflib extensions tarball '$pdflib_extension_tarball' does not exist" unless (-f $pdflib_extension_tarball);
+	$self->shell("tar -xzvf $pdflib_extension_tarball");
+	$self->shell("mv pdflib-2.*.* pdf; rm package.xml");
+
+}
+
+
 sub package_filelist {
 
 	my $self = shift @_;

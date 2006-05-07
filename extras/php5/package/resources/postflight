@@ -2,8 +2,8 @@
 
 # http://developer.apple.com/documentation/DeveloperTools/Conceptual/SoftwareDistribution/Concepts/sd_pre_post_processing.html
 
+# deactivate old entropy php activation lines
+perl -i.entropy.backup -e 'undef $/; $_ = <>; s/(# begin entropy.ch)(.+?)(# end entropy.ch.*?)$/($a, $b, $c) = ($1, $2, $3); $b =~ s!^(?=[^#])!#!mg; "$a$b$c"/smeg; print' /etc/httpd/httpd.conf
+
 echo running activate script for Entropy PHP
 python $2/bin/activate-entropy-php.py
-
-
-

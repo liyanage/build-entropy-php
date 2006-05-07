@@ -24,7 +24,7 @@ sub packagename {
 sub dependency_names {
 	return qw(curl mysql libxml2 libxslt pdflib pdflib_commercial oracleinstantclient
 		imapcclient libjpeg libpng libfreetype iodbc postgresql t1lib
-		gettext ming mcrypt mhash mssql frontbase);
+		gettext ming mcrypt mhash mssql frontbase json);
 }
 
 
@@ -104,25 +104,14 @@ sub build_arch_pre {
 	my $self = shift @_;
 	my (%args) = @_;
 
-	# replace pdflib extension module source with newer version
-	$self->cd('ext');
-	$self->shell("rm -rf pdf");
-	my $pdflib_extension_tarball = $self->extras_dir() . "/pdflib-2.0.5.tgz";
-	die "pdflib extensions tarball '$pdflib_extension_tarball' does not exist" unless (-f $pdflib_extension_tarball);
-	$self->shell("tar -xzvf $pdflib_extension_tarball");
-	$self->shell("mv pdflib-2.*.* pdf; rm package.xml");
-
-	# replace pdo_mysql extension module source with newer version
-# 	my $pdo_mysql_tarball = $self->config()->downloaddir() . "/PDO_MYSQL-1.0.2.tgz";
-# 	if (! -e $pdo_mysql_tarball) {
-# 		$self->shell("curl -o $pdo_mysql_tarball http://pecl.php.net/get/PDO_MYSQL-1.0.2.tgz");
-# 	}
-# 	$self->cd_packagesrcdir();
-# 	$self->cd('ext');
-# 	$self->shell("rm -rf pdo_mysql");
-# 	$self->shell("tar -xzvf $pdo_mysql_tarball");
-# 	$self->shell("mv PDO_MYSQL-1.0.2 pdo_mysql; rm package.xml package2.xml");
-
+	# give extension modules a chance to tweak the contents of the ext directory
+	
+	foreach my $dependency ($self->dependencies()) {
+		$self->cd_packagesrcdir();
+		$self->cd('ext');
+		$dependency->php_build_arch_pre(%args, php_package => $self);
+	}
+	
 	$self->cd_packagesrcdir();
 	$self->shell("aclocal");
 	$self->shell("./buildconf --force");
@@ -130,8 +119,6 @@ sub build_arch_pre {
 	$self->shell({fatal => 0}, "ranlib " . $self->install_tmp_prefix() . "/lib/*.a");
 
 }
-
-
 
 
 
@@ -228,14 +215,11 @@ sub unpack {
 }
 
 
+
 sub cflags {
-
 	my $self = shift @_;
-	
 	return $self->SUPER::cflags(@_) . " -DENTROPY_CH_RELEASE=" . $self->config()->release();
-
 }
-
 
 
 
@@ -255,6 +239,10 @@ sub package_filelist {
 		php.d/10-extension_dir.ini
 	);
 	
+}
+
+sub package_excludelist {
+	return qw(lib/php/extensions);
 }
 
 
@@ -296,6 +284,8 @@ sub create_metapackage {
 	my $xslt = $self->extras_path('metapackage/info-plist-postprocess.xslt');
 	$self->shell({silent => 0}, "xsltproc --stringparam version $version -o $dst/Contents/Info.plist.out $xslt $dst/Contents/Info.plist && mv -f $dst/Contents/Info.plist.out $dst/Contents/Info.plist"); 
 
+	$self->shell("cd /tmp && tar -cvzf entropy-php-$version.tar.gz", $self->mpkg_filename()); 
+
 	$self->shell('open /tmp/');
 	
 }
@@ -333,13 +323,13 @@ sub prepackage_hook {
 sub pkg_filename {
 	my $self = shift @_;
 	my $version = $self->config()->version() . '-' . $self->config()->release();
-	return "entropy-php-$version.pkg";
+	return "entropy-php.pkg";
 }
 
 sub mpkg_filename {
 	my $self = shift @_;
 	my $version = $self->config()->version() . '-' . $self->config()->release();
-	return "entropy-php-$version.mpkg";
+	return "entropy-php.mpkg";
 }
 
 

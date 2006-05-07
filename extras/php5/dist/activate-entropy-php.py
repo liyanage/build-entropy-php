@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import os
+import sys
 
 prefix = '{prefix}'
 
@@ -25,7 +26,8 @@ if os.system("test -h " + httpd_conf_symlink):
 os.system("cd " + prefix + "/lib && test -e php.ini || cp php.ini-recommended php.ini")
 os.system("cd " + prefix + "/etc && test -e pear.conf || cp pear.conf.default pear.conf")
 
-os.system("apachectl restart")
+result = os.system("apachectl restart") >> 8
+sys.exit(result)
 
 
 #extensions_path = prefix + '/lib/php/extensions/no-debug-non-zts-20050922'

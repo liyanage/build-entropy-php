@@ -96,7 +96,11 @@ sub create_package {
 	$self->shell("rm -rf $dir/*");
 
 	$self->cd($self->config()->prefix());
-	$self->shell("tar -cf - $list | (cd $dir && tar -xf -)");
+
+	my $excludes = join(' ', $self->package_excludelist());
+	$excludes = $excludes ? "--exclude $excludes" : '';
+	
+	$self->shell("tar $excludes -cf - $list | (cd $dir && tar -xf -)");
 
 	$self->prepackage_hook($dir);
 
@@ -105,6 +109,10 @@ sub create_package {
 
 }
 
+
+sub package_excludelist {
+	return ();
+}
 
 
 sub package_infofile {
@@ -154,7 +162,7 @@ sub prepackage_hook {
 sub pkg_filename {
 	my $self = shift @_;
 	my $version = $self->config()->version() . '-' . $self->config()->release();
-	return "entropy-php-$version-extension-" . $self->shortname() . ".pkg";
+	return "entropy-php-extension-" . $self->shortname() . ".pkg";
 }
 
 
@@ -431,6 +439,10 @@ sub php_dso_extension_names {
 	return undef;
 }
 
+
+
+sub php_build_arch_pre {
+}
 
 
 
