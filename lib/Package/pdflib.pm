@@ -8,20 +8,11 @@ use base qw(PackageSplice);
 our $VERSION = '6.0.3';
 
 
-sub init {
-
-	my $self = shift @_;
-	$self->SUPER::init(@_);
-
-	$self->{lite} = $self->config()->pdflib_lite();
-
-}
-
 
 
 sub base_url {
 	my $self = shift;
-	return $self->{lite} ? "http://www.pdflib.com/products/pdflib/download/603src" : '';
+	return "http://www.pdflib.com/products/pdflib/download/603src";
 }
 
 

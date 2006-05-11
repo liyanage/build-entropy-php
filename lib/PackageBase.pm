@@ -97,9 +97,7 @@ sub create_package {
 
 	$self->cd($self->config()->prefix());
 
-	my $excludes = join(' ', $self->package_excludelist());
-	$excludes = $excludes ? "--exclude $excludes" : '';
-	
+	my $excludes = join(' ', map {"--exclude $_"} $self->package_excludelist());
 	$self->shell("tar $excludes -cf - $list | (cd $dir && tar -xf -)");
 
 	$self->prepackage_hook($dir);
