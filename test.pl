@@ -17,11 +17,21 @@ my $config = Config->new(
 	pdflib_lite          => 1,
 	mysql_install_prefix => undef,
 	cpus                 => 2,
+	variants             => {
+		apache1          => {
+			apxs_option  => '--with-apxs',
+			suffix       => '',
+		},
+		apache2          => {
+			apxs_option  => '--with-apxs2=/opt/apache2/bin/apxs',
+			suffix       => '-apache2',
+		},
+	},
 	version              => '5.1.4',
-	release              => 4,
+	release              => 5,
 );
 
-my $php5 = Package::php5->new(config => $config);
+my $php5 = Package::php5->new(config => $config, variant => 'apache2');
 
 $php5->create_distimage();
 

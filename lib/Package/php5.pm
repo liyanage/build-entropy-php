@@ -24,8 +24,8 @@ sub packagename {
 sub dependency_names {
 	return qw(curl mysql libxml2 libxslt pdflib pdflib_commercial oracleinstantclient
 		imapcclient libjpeg libpng libfreetype iodbc postgresql t1lib
-		gettext ming mcrypt mhash mssql frontbase json tidy);
-		#openbase
+		gettext ming mcrypt mhash mssql frontbase json);
+		#openbase tidy
 }
 
 
@@ -70,12 +70,14 @@ sub configure_flags {
 		"--enable-dbase",
 		"--enable-mbstring",
 		"--enable-calendar",
+		"--enable-bcmath",
 		"--with-bz2=/usr",
 	);
 
 	push @extension_flags, $self->dependency_extension_flags(%args);
-
-	return $self->SUPER::configure_flags() . " --with-apxs @extension_flags";
+	
+	my $apxs_option = $self->config()->variants()->{$self->{variant}}->{apxs_option};
+	return $self->SUPER::configure_flags() . " $apxs_option @extension_flags";
 	
 }
 
@@ -285,7 +287,8 @@ sub create_metapackage {
 	my $xslt = $self->extras_path('metapackage/info-plist-postprocess.xslt');
 	$self->shell({silent => 0}, "xsltproc --stringparam version $version -o $dst/Contents/Info.plist.out $xslt $dst/Contents/Info.plist && mv -f $dst/Contents/Info.plist.out $dst/Contents/Info.plist"); 
 
-	$self->shell("cd /tmp && tar -cvzf entropy-php-$version.tar.gz", $self->mpkg_filename()); 
+	my $variant_suffix = $self->config()->variants()->{$self->{variant}}->{suffix};
+	$self->shell("cd /tmp && tar -cvzf entropy-php-$version$variant_suffix.tar.gz", $self->mpkg_filename()); 
 
 	$self->shell('open /tmp/');
 	
