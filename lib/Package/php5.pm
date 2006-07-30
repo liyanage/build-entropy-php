@@ -166,6 +166,8 @@ sub install {
 
 	$self->create_dso_ini_files();
 
+	$self->shell({slient => 0}, "sudo chown -R root:wheel '$prefix'");
+
 }
 
 

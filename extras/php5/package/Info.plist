@@ -11,7 +11,7 @@
 	<key>CFBundleShortVersionString</key>
 	<string>{version}</string>
 	<key>IFPkgFlagAuthorizationAction</key>
-	<string>AdminAuthorization</string>
+	<string>RootAuthorization</string>
 	<key>IFPkgFlagDefaultLocation</key>
 	<string>{prefix}</string>
 	<key>IFPkgFlagFollowLinks</key>
