@@ -27,11 +27,11 @@ my $config = Config->new(
 			suffix       => '-apache2',
 		},
 	},
-	version              => '5.1.4',
-	release              => 5,
+	version              => '5.1.5',
+	release              => 1,
 );
 
-my $php5 = Package::php5->new(config => $config, variant => 'apache2');
+my $php5 = Package::php5->new(config => $config, variant => 'apache1');
 
 $php5->create_distimage();
 

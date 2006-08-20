@@ -24,7 +24,7 @@ sub packagename {
 sub dependency_names {
 	return qw(curl mysql libxml2 libxslt pdflib pdflib_commercial oracleinstantclient
 		imapcclient libjpeg libpng libfreetype iodbc postgresql t1lib
-		gettext ming mcrypt mhash mssql frontbase json);
+		gettext ming mcrypt mhash mssql frontbase json memcache);
 		#openbase tidy
 }
 
@@ -60,6 +60,7 @@ sub configure_flags {
 		"--with-ldap",
 		"--with-xmlrpc",
 		"--with-iconv-dir=/usr",
+		"--with-snmp=/usr",
 		"--enable-exif",
 		"--enable-wddx",
 		"--enable-soap",
@@ -167,6 +168,7 @@ sub install {
 	$self->create_dso_ini_files();
 
 	$self->shell({slient => 0}, "sudo chown -R root:wheel '$prefix'");
+	$self->shell({slient => 0}, "test -e '$prefix/lib/php/build' || sudo ln -s '$prefix/lib/build' '$prefix/lib/php/'");
 
 }
 
