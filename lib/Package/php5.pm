@@ -241,6 +241,7 @@ sub package_filelist {
 		lib/libxml2*.dylib lib/libpng*.dylib lib/libfreetype*.dylib lib/libt1*.dylib
 		bin/php* bin/pear bin/pecl bin/peardev bin/activate-*
 		lib/php
+		lib/build
 		lib/php.ini-recommended
 		include/php
 		php.d/10-extension_dir.ini
