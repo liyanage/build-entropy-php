@@ -28,7 +28,7 @@ my $config = Config->new(
 		},
 	},
 	version              => '5.1.6',
-	release              => 1,
+	release              => 2,
 );
 
 my $php5 = Package::php5->new(config => $config, variant => 'apache1');
