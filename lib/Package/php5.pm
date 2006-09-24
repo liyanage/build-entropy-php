@@ -24,8 +24,9 @@ sub packagename {
 sub dependency_names {
 	return qw(curl mysql libxml2 libxslt pdflib pdflib_commercial oracleinstantclient
 		imapcclient libjpeg libpng libfreetype iodbc postgresql t1lib
-		gettext ming mcrypt mhash mssql frontbase json memcache);
-		#openbase tidy
+		gettext ming mcrypt mhash mssql frontbase json memcache openbase);
+		#openbase
+		#tidy
 }
 
 
