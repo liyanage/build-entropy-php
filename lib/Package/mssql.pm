@@ -5,7 +5,7 @@ use warnings;
 
 use base qw(PackageSplice);
 
-our $VERSION = '0.63';
+our $VERSION = '0.64';
 
 
 

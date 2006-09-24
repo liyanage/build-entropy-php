@@ -5,7 +5,7 @@ use warnings;
 
 use base qw(PackageSplice);
 
-our $VERSION = '8.1.3';
+our $VERSION = '8.1.4';
 
 
 sub base_url {
@@ -40,26 +40,27 @@ sub php_extension_configure_flags {
 
 
 sub build_arch_make {
-
 	my $self = shift @_;
 	my (%args) = @_;
 
-	$self->cd("src/interfaces");
-	$self->shell("make" . $self->make_flags());
-
+	foreach my $subdir (qw(interfaces include)) {
+		$self->cd("src/$subdir");
+		$self->shell("make" . $self->make_flags());
+		$self->cd("../..");
+	}
 }
 
 
 
 sub make_install_arch {
-
 	my $self = shift @_;
 	my (%args) = @_;
-
 	my $install_override = $self->make_install_override_list(prefix => $args{prefix});
-	$self->cd("src/interfaces");
-	$self->shell($self->make_command() . " $install_override install");
-
+	foreach my $subdir (qw(interfaces include)) {
+		$self->cd("src/$subdir");
+		$self->shell($self->make_command() . " $install_override install");
+		$self->cd("../..");
+	}
 }
 
 

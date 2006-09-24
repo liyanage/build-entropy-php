@@ -5,7 +5,7 @@ use warnings;
 
 use base qw(PackageSplice);
 
-our $VERSION = '5.0.19';
+our $VERSION = '5.0.24a';
 
 sub init {
 

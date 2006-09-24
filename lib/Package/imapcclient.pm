@@ -6,6 +6,7 @@ use warnings;
 use base qw(Package);
 
 our $VERSION = '2004g';
+#our $VERSION = '2006a';
 
 
 
@@ -56,8 +57,8 @@ sub php_extension_configure_flags {
 
 	my $self = shift @_;
 	my (%args) = @_;
-
-	return "--with-imap=../imap-2004g --with-kerberos=/usr --with-imap-ssl=/usr";
+	my $packagename = $self->packagename();
+	return "--with-imap=../$packagename --with-kerberos=/usr --with-imap-ssl=/usr";
 
 }
 

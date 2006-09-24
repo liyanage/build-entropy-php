@@ -8,9 +8,8 @@ use base qw(PackageSplice);
 our $VERSION = '5.1.0';
 
 
-
 sub base_url {
-	return "ftp://sunsite.cnlab-switch.ch/mirror/linux/sunsite/libs/graphics";
+	return "ftp://ftp.foolabs.com/pub/xpdf";
 }
 
 
