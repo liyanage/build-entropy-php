@@ -182,8 +182,9 @@ sub create_dso_ini_files {
 
 	my @dso_names = grep {$_} map {$_->php_dso_extension_names()} $self->dependencies();
 	my $prefix = $self->config()->prefix();
+	my $extdir = $self->config()->extdir();
 	$self->shell({silent => 0}, "echo 'extension=$_' > $prefix/php.d/50-extension-$_.ini") foreach (@dso_names);
-	$self->shell({silent => 0}, qq!echo 'extension_dir=$prefix/lib/php/extensions/no-debug-non-zts-20050922' > $prefix/php.d/10-extension_dir.ini!);
+	$self->shell({silent => 0}, qq!echo 'extension_dir=$prefix/$extdir' > $prefix/php.d/10-extension_dir.ini!);
 
 }
 
@@ -324,8 +325,9 @@ sub prepackage_hook {
 
 	my $self = shift @_;
 	my ($pkgroot) = @_;
-	
-	$self->shell("mkdir -p $pkgroot/lib/php/extensions/no-debug-non-zts-20050922");
+
+	my $extdir = $self->config()->extdir();
+	$self->shell("mkdir -p $pkgroot/$extdir");
 	$self->shell("mkdir -p $pkgroot/php.d");
 
 }

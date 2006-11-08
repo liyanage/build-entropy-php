@@ -121,7 +121,7 @@ sub package_filelist {
 
 	my $self = shift @_;
 
-	return qw(lib/php/extensions/no-debug-non-zts-20050922/fbsql php.d/50-extension-fbsql.ini);
+	return $self->config()->extdir_path('fbsql'), qw(php.d/50-extension-fbsql.ini);
 	
 }
 

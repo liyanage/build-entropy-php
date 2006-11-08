@@ -50,8 +50,7 @@ sub package_filelist {
 
 	my $self = shift @_;
 
-	return qw(
-		lib/php/extensions/no-debug-non-zts-20050922/mhash
+	return $self->config()->extdir_path('mhash'), qw(
 		lib/libmhash*.dylib
 		php.d/50-extension-mhash.ini
 	);

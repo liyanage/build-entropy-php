@@ -24,7 +24,7 @@ sub init {
 	
 	die "basedir constructor argument must point to a directory" unless (-d $self->basedir());
 
-	my @archs = grep {my $__ = $_; grep {$__ eq $_} @KNOWN_ARCHS} $self->dir_contents($self->basedir());
+	my @archs = grep {my $__ = $_; grep {$__ eq $_} @KNOWN_ARCHS} $self->dir_content($self->basedir());
 	
 #	$self->log("found archs: @archs");
 	
@@ -59,7 +59,7 @@ sub process_dir {
 	}
 
 	my $subdir_path = $self->master_path($subpath);
-	my @items = $self->dir_contents($subdir_path);
+	my @items = $self->dir_content($subdir_path);
 
 	foreach my $item (@items) {
 

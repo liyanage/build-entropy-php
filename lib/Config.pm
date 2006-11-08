@@ -52,5 +52,42 @@ sub makedirs {
 
 
 
+sub zend_module_api_no {
+	my $self = shift @_;
+	my $srcdir = $self->srcdir();
+	my $value = qx(grep 'define ZEND_MODULE_API_NO' $srcdir/php-*/Zend/zend_modules.h | cut -f 3 -d ' ');
+	chomp($value);
+	die "Unable to find zend module api no, PHP source dir not yet unpacked?" unless ($value);
+	return $value;
+}
+
+sub extdir {
+	my $self = shift @_;
+	return 'lib/php/extensions/no-debug-non-zts-' . $self->zend_module_api_no();
+}
+
+sub extdir_path {
+	my $self = shift @_;
+	my ($filename) = @_;
+	return $self->extdir() . "/$filename";
+}
+
+#sub extension_dir {
+#	my $self = shift @_;
+#	my $srcdir = $self->srcdir();
+#	my $value = qx(grep 'EXTENSION_DIR =' $srcdir/php-*/Makefile | cut -f 3 -d ' ');
+#	chomp($value);
+#	die "Unable to find EXTENSION_DIR, PHP source dir not yet unpacked?" unless ($value);
+#	return $value;
+#}
+
+
+
+
+
+
+
+
+
 1;
 

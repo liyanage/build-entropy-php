@@ -51,8 +51,7 @@ sub package_filelist {
 	my $self = shift @_;
 
 	# the .so files as built by the FreeTDS build might be broken. might need to investigate.
-	return qw(
-		lib/php/extensions/no-debug-non-zts-20050922/mssql
+	return $self->config()->extdir_path('mssql'), qw(
 		etc/freetds.conf etc/locales.conf etc/pool.conf
 		lib/libtds*.dylib lib/libct*.dylib lib/libsybdb*.dylib lib/libtdsodbc*.so lib/libtdssrv*.dylib
 		php.d/50-extension-mssql.ini

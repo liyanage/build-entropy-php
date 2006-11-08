@@ -139,16 +139,13 @@ sub php_dso_extension_names {
 }
 
 
-
-
 sub package_filelist {
-
 	my $self = shift @_;
-
-	return qw(lib/php/extensions/no-debug-non-zts-20050922/oci8 lib/php/extensions/no-debug-non-zts-20050922/pdo_oci oracle/lib* php.d/50-extension-*oci*.ini);
-	
+	return
+		$self->config()->extdir_path('oci8'),
+		$self->config()->extdir_path('pdo_oci'),
+		qw(oracle/lib* php.d/50-extension-*oci*.ini);
 }
-
 
 
 sub package_resdir {

@@ -77,8 +77,7 @@ sub package_filelist {
 
 	my $self = shift @_;
 
-	return qw(
-		lib/php/extensions/no-debug-non-zts-20050922/*pgsql
+	return $self->config()->extdir_path('*pgsql'), qw(
 		lib/libpgtypes*.dylib
 		lib/libpq*.dylib
 		php.d/50-extension-*pgsql*.ini

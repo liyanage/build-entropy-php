@@ -59,8 +59,7 @@ sub package_filelist {
 
 	my $self = shift @_;
 
-	return qw(
-		lib/php/extensions/no-debug-non-zts-20050922/mcrypt
+	return $self->config()->extdir_path('mcrypt'), qw(
 		lib/libmcrypt*.dylib
 		php.d/50-extension-mcrypt.ini
 	);

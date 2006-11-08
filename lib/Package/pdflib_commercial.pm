@@ -56,13 +56,12 @@ sub prepackage_hook {
 	my ($pkgroot) = @_;
 	
 	my $dp = $self->download_path();
-	my $extdir = "$pkgroot/lib/php/extensions/no-debug-non-zts-20050922";
+	my $extdir = "$pkgroot/" . $self->config()->extdir();
 	
 	$self->shell("mkdir -p $extdir");
 	$self->shell("cp $dp $extdir/pdf");
 
 }
-
 
 
 sub php_dso_extension_names {
@@ -71,13 +70,10 @@ sub php_dso_extension_names {
 }
 
 
-
 sub package_filelist {
-
 	my $self = shift @_;
-
-	return qw(lib/php/extensions/no-debug-non-zts-20050922/pdf php.d/50-extension-pdf.ini);
-	
+	return $self->config()->extdir_path('pdf'), qw(php.d/50-extension-pdf.ini);
 }
+
 
 1;

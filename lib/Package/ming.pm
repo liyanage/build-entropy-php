@@ -89,8 +89,7 @@ sub package_filelist {
 
 	my $self = shift @_;
 
-	return qw(
-		lib/php/extensions/no-debug-non-zts-20050922/ming
+	return $self->config()->extdir_path('ming'), qw(
 		lib/libming*.dylib
 		php.d/50-extension-ming.ini
 	);

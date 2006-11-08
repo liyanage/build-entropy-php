@@ -94,7 +94,7 @@ sub package_filelist {
 
 	my $self = shift @_;
 
-	return qw(lib/php/extensions/no-debug-non-zts-20050922/pdf php.d/50-extension-pdf.ini lib/libpdf*.dylib);
+	return $self->config()->extdir_path('pdf'), qw(php.d/50-extension-pdf.ini lib/libpdf*.dylib);
 	
 }
 

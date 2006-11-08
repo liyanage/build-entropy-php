@@ -86,13 +86,14 @@ sub package_filelist {
 
 	my $self = shift @_;
 
-	return qw(
-		lib/php/extensions/no-debug-non-zts-20050922/mysql
-		lib/php/extensions/no-debug-non-zts-20050922/mysqli
-		lib/php/extensions/no-debug-non-zts-20050922/pdo_mysql
-		lib/mysql/lib*.dylib
-		php.d/50-extension-*mysql*.ini
-	);
+	return
+		$self->config()->extdir_path('mysql'), 
+		$self->config()->extdir_path('mysqli'), 
+		$self->config()->extdir_path('pdo_mysql'),
+		qw(
+			lib/mysql/lib*.dylib
+			php.d/50-extension-*mysql*.ini
+		);
 	
 }
 

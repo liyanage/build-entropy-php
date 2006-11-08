@@ -31,11 +31,8 @@ sub php_dso_extension_names {
 
 
 sub package_filelist {
-
 	my $self = shift @_;
-
-	return qw(lib/php/extensions/no-debug-non-zts-20050922/odbc php.d/50-extension-odbc.ini);
-	
+	return $self->config()->extdir_path('odbc'), qw(php.d/50-extension-odbc.ini);
 }
 
 

@@ -94,12 +94,15 @@ sub shell {
 }
 
 
-sub dir_contents {
-	
+sub dir_content {
 	my $self = shift @_;
-	
 	return grep {!/^\.+$/} IO::Dir->new($_[0])->read();
-	
+}
+
+sub file_content {
+	my $self = shift @_;
+	my ($filename) = @_;
+	return do {undef local($/); IO::File->new($filename)->getline()};
 }
 
 
