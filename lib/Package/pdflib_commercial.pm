@@ -14,24 +14,22 @@ our $VERSION = '6.0.3';
 sub download {
 
 	my $self = shift @_;
-
 	$_->download() foreach $self->dependencies();
-
 	return if ($self->is_downloaded());
 
 	my $dp = $self->download_path();
+	$self->cd('/tmp');
 
-	$self->log("downloading commercial PDFlib, i386");
-	$self->shell("hdiutil attach http://www.pdflib.com/fileadmin/pdflib/products/pdflib/download/603/PDFlib-6.0.3p2-MacOSX-Intel.dmg");
-	$self->shell("cp /Volumes/PDFlib-*/bind/php5/php-510/libpdf_php.so $dp.i386");
-	$self->shell("hdiutil detach /Volumes/PDFlib-*/");
+	foreach my $arch qw (PowerPC Intel) {
+		$self->log("downloading commercial PDFlib, $arch");
+		$self->shell("curl -O http://www.pdflib.com/binaries/PDFlib/603/PDFlib-6.0.3p5-MacOSX-$arch-php.tar.gz");
+		$self->shell("tar -xzf PDFlib-*.tar.gz");
+		$self->shell("cp PDFlib-*/bind/php5/php-520/libpdf_php.so $dp.$arch");
+		$self->shell("rm -rf PDFlib-*");
 
-	$self->log("downloading commercial PDFlib, ppc");
-	$self->shell("hdiutil attach http://www.pdflib.com/fileadmin/pdflib/products/pdflib/download/603/PDFlib-6.0.3-MacOSX-PowerPC.dmg");
-	$self->shell("cp /Volumes/PDFlib-*/bind/php5/php-510/libpdf_php.so $dp.ppc");
-	$self->shell("hdiutil detach /Volumes/PDFlib-*/");
+	}	
 
-	$self->shell("lipo -create -arch ppc $dp.ppc -arch i386 $dp.i386 -output $dp");
+	$self->shell("lipo -create -arch ppc $dp.PowerPC -arch i386 $dp.Intel -output $dp");
 
 }
 
