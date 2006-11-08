@@ -74,6 +74,7 @@ sub configure_flags {
 		"--enable-calendar",
 		"--enable-bcmath",
 		"--with-bz2=/usr",
+		"--enable-memory-limit",
 	);
 
 	push @extension_flags, $self->dependency_extension_flags(%args);

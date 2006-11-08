@@ -57,7 +57,7 @@ sub install {
 	my $prefix = $self->config()->prefix();
 	$self->shell("mkdir -p $prefix/oracle");
 
-	foreach my $lib (qw(libclntsh.dylib.10.1 libociei.dylib)) {
+	foreach my $lib (qw(libclntsh.dylib.10.1 libnnz10.dylib libociei.dylib)) {
 		$self->shell("cp $lib $prefix/oracle");
 		$self->shell("install_name_tool -id $prefix/oracle/$lib $prefix/oracle/$lib");
 	}

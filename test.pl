@@ -23,11 +23,11 @@ my $config = Config->new(
 			suffix       => '',
 		},
 		apache2          => {
-			apxs_option  => '--with-apxs2=/opt/apache2/bin/apxs',
+			apxs_option  => '--with-apxs2=/usr/local/apache2/bin/apxs',
 			suffix       => '-apache2',
 		},
 	},
-	version              => '5.1.6',
+	version              => '5.2.0',
 	release              => 2,
 );
 
