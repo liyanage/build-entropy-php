@@ -22,12 +22,12 @@ sub download {
 	my $dp = $self->download_path();
 
 	$self->log("downloading commercial PDFlib, i386");
-	$self->shell("hdiutil attach http://www.pdflib.com/products/pdflib/download/603/PDFlib-6.0.3p2-MacOSX-Intel.dmg");
+	$self->shell("hdiutil attach http://www.pdflib.com/fileadmin/pdflib/products/pdflib/download/603/PDFlib-6.0.3p2-MacOSX-Intel.dmg");
 	$self->shell("cp /Volumes/PDFlib-*/bind/php5/php-510/libpdf_php.so $dp.i386");
 	$self->shell("hdiutil detach /Volumes/PDFlib-*/");
 
 	$self->log("downloading commercial PDFlib, ppc");
-	$self->shell("hdiutil attach http://www.pdflib.com/products/pdflib/download/603/PDFlib-6.0.3-MacOSX-PowerPC.dmg");
+	$self->shell("hdiutil attach http://www.pdflib.com/fileadmin/pdflib/products/pdflib/download/603/PDFlib-6.0.3-MacOSX-PowerPC.dmg");
 	$self->shell("cp /Volumes/PDFlib-*/bind/php5/php-510/libpdf_php.so $dp.ppc");
 	$self->shell("hdiutil detach /Volumes/PDFlib-*/");
 
