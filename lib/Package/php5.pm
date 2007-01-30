@@ -74,7 +74,10 @@ sub configure_flags {
 		"--enable-calendar",
 		"--enable-bcmath",
 		"--with-bz2=/usr",
+		"--enable-fastcgi",
+		"--enable-cgi",
 		"--enable-memory-limit",
+		"--enable-zip",
 	);
 
 	push @extension_flags, $self->dependency_extension_flags(%args);
@@ -136,6 +139,11 @@ sub make_install_arch {
 	my $install_override = $self->make_install_override_list(prefix => $args{prefix});
 
 	$self->shell($self->make_command() . " $install_override install-$_") foreach qw(cli build headers programs modules);
+
+#	$self->shell($self->make_command() . " $install_override install-$_") foreach qw(cgi build headers programs modules);
+#	$self->shell("mv $args{prefix}/bin/php $args{prefix}/bin/php-cgi");
+
+#	$self->shell($self->make_command() . " $install_override install-$_") foreach qw(cli);
 	$self->shell("cp libs/libphp5.so $args{prefix}");
 
 	$self->shell("rm $args{prefix}/lib/php/extensions/*/*.a");

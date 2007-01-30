@@ -28,10 +28,10 @@ my $config = Config->new(
 		},
 	},
 	version              => '5.2.0',
-	release              => 3,
+	release              => 5,
 );
 
-my $php5 = Package::php5->new(config => $config, variant => 'apache2');
+my $php5 = Package::php5->new(config => $config, variant => 'apache1');
 
 $php5->create_distimage();
 
