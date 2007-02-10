@@ -69,7 +69,7 @@ sub build_arch {
 	my $cflags = $self->cflags();
 	my $ldflags = $self->ldflags();
 	$self->cd_packagesrcdir();
-	$self->shell("CFLAGS='$cflags' LDFLAGS='$ldflags' CC='cc -arch $args{arch}' CXX='c++ -arch $args{arch}' ./configure " . $self->configure_flags(arch => $args{arch}));
+	$self->shell("CFLAGS='$cflags' LDFLAGS='$ldflags' CC='cc -arch $args{arch} -DENTROPY_CH_RELEASE=" . $self->config()->release() . "' CXX='c++ -arch $args{arch}' ./configure " . $self->configure_flags(arch => $args{arch}));
 	$self->build_arch_make(%args);
 
 }

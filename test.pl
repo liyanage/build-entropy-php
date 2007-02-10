@@ -1,7 +1,5 @@
 
-# asdfdsfeasdfas sadfsadf
-# asdfasdfgf
-
+# Main driver script for the PHP build process
 
 use strict;
 use warnings;
@@ -27,11 +25,11 @@ my $config = Config->new(
 			suffix       => '-apache2',
 		},
 	},
-	version              => '5.2.0',
-	release              => 5,
+	version              => '5.2.1',
+	release              => 1,
 );
 
-my $php5 = Package::php5->new(config => $config, variant => 'apache1');
+my $php5 = Package::php5->new(config => $config, variant => 'apache2');
 
 $php5->create_distimage();
 
