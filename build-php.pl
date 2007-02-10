@@ -1,5 +1,9 @@
 
 # Main driver script for the PHP build process
+#
+# Invoke with
+#     sudo perl -Ilib build-php.pl
+#
 
 use strict;
 use warnings;
