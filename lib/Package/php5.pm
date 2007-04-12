@@ -8,7 +8,9 @@ use IO::Dir;
 
 use base qw(PackageSplice);
 
-
+# todo:
+# rework this so it runs normally and a third time for the cli version.
+# enable --enable-pcntl and fastcgi for the cgi version
 
 sub base_url {
 	return "http://us2.php.net/distributions";
@@ -138,9 +140,9 @@ sub make_install_arch {
 
 	my $install_override = $self->make_install_override_list(prefix => $args{prefix});
 
-	$self->shell($self->make_command() . " $install_override install-$_") foreach qw(cli build headers programs modules);
+#	$self->shell($self->make_command() . " $install_override install-$_") foreach qw(cli build headers programs modules);
 
-#	$self->shell($self->make_command() . " $install_override install-$_") foreach qw(cgi build headers programs modules);
+	$self->shell($self->make_command() . " $install_override install-$_") foreach qw(cgi build headers programs modules);
 #	$self->shell("mv $args{prefix}/bin/php $args{prefix}/bin/php-cgi");
 
 #	$self->shell($self->make_command() . " $install_override install-$_") foreach qw(cli);
