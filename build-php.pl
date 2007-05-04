@@ -29,7 +29,7 @@ my $config = Config->new(
 			suffix       => '-apache2',
 		},
 	},
-	version              => '5.2.1',
+	version              => '5.2.2',
 	release              => 1,
 );
 

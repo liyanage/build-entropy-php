@@ -10,7 +10,9 @@ use base qw(PackageSplice);
 
 # todo:
 # rework this so it runs normally and a third time for the cli version.
+# add the new cli/cgi (?) as php-cli or php-cgi
 # enable --enable-pcntl and fastcgi for the cgi version
+# switch to pdflib 7
 
 sub base_url {
 	return "http://us2.php.net/distributions";
@@ -80,6 +82,7 @@ sub configure_flags {
 		"--enable-cgi",
 		"--enable-memory-limit",
 		"--enable-zip",
+		"--enable-pcntl",
 	);
 
 	push @extension_flags, $self->dependency_extension_flags(%args);
@@ -140,9 +143,9 @@ sub make_install_arch {
 
 	my $install_override = $self->make_install_override_list(prefix => $args{prefix});
 
-#	$self->shell($self->make_command() . " $install_override install-$_") foreach qw(cli build headers programs modules);
+	$self->shell($self->make_command() . " $install_override install-$_") foreach qw(cli build headers programs modules);
 
-	$self->shell($self->make_command() . " $install_override install-$_") foreach qw(cgi build headers programs modules);
+#	$self->shell($self->make_command() . " $install_override install-$_") foreach qw(cgi build headers programs modules);
 #	$self->shell("mv $args{prefix}/bin/php $args{prefix}/bin/php-cgi");
 
 #	$self->shell($self->make_command() . " $install_override install-$_") foreach qw(cli);
