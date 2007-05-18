@@ -83,6 +83,10 @@ sub configure_flags {
 		"--enable-memory-limit",
 		"--enable-zip",
 		"--enable-pcntl",
+		"--enable-shmop",
+		"--enable-sysvsem",
+		"--enable-sysvshm",
+		"--enable-sysvmsg",
 	);
 
 	push @extension_flags, $self->dependency_extension_flags(%args);
