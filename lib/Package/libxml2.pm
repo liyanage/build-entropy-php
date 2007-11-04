@@ -3,9 +3,9 @@ package Package::libxml2;
 use strict;
 use warnings;
 
-use base qw(PackageSplice);
+use base qw(Package);
 
-our $VERSION = '2.6.26';
+our $VERSION = '2.6.30';
 
 
 
@@ -23,9 +23,9 @@ sub packagename {
 
 sub configure_flags {
 	my $self = shift @_;
-	
+	my $prefix = $self->config()->prefix();
 	return $self->SUPER::configure_flags() . " --without-python";
-
+#	return $self->SUPER::configure_flags() . " --without-python --with-iconv=$prefix";
 }
 
 
@@ -35,12 +35,9 @@ sub subpath_for_check {
 
 
 sub php_extension_configure_flags {
-
 	my $self = shift @_;
 	my (%args) = @_;
-
 	return "--with-libxml-dir=shared," . $self->config()->prefix();
-
 }
 
 

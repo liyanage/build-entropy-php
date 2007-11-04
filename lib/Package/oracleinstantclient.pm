@@ -71,6 +71,10 @@ sub install {
 	# is hardcoded so we provide a symlink to make it happy
 	$self->shell("cd $prefix/oracle && ln -s libclntsh.dylib libclntsh.so");
 
+	# the configure script seems to have been changed to expect the libs in a 
+	# lib subdir after PHP 5.2.2, we provide a symlink now
+	$self->shell("cd $prefix/oracle && ln -s . lib");
+
 }
 
 sub is_installed {

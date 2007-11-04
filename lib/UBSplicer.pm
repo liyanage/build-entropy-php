@@ -8,7 +8,7 @@ use base qw(Obj);
 
 our $VERSION = '1.0';
 
-our @KNOWN_ARCHS = qw(ppc i386);
+our @KNOWN_ARCHS = qw(i386 x86_64 ppc7400 ppc64);
 our $MASTER_ARCH = $KNOWN_ARCHS[0];
 
 our @EXECUTABLE_REGEXES = (
@@ -19,32 +19,18 @@ our @EXECUTABLE_REGEXES = (
 
 
 sub init {
-
 	my $self = shift @_;
-	
 	die "basedir constructor argument must point to a directory" unless (-d $self->basedir());
-
 	my @archs = grep {my $__ = $_; grep {$__ eq $_} @KNOWN_ARCHS} $self->dir_content($self->basedir());
-	
 #	$self->log("found archs: @archs");
-	
 	die "Number of archs != 2: '@archs'" if (@archs != 2);
-
 }
-
-
-
 
 
 sub run {
-
 	my $self = shift @_;
-
 	$self->process_dir('');
-	
 }
-
-
 
 
 sub process_dir {
@@ -119,39 +105,29 @@ sub process_file {
 
 
 sub universal_path {
-
 	my $self = shift @_;
 	my ($subpath) = @_;
-
 	return $self->basedir() . "/universal/$subpath";
-
 }
+
 
 sub master_path {
-
 	my $self = shift @_;
 	my ($subpath) = @_;
-
 	return $self->basedir() . "/$MASTER_ARCH/$subpath";
-
 }
 
+
 sub arch_paths {
-	
 	my $self = shift @_;
 	my ($subpath) = @_;
-
 	return map {$self->basedir() . "/$_/$subpath"} @KNOWN_ARCHS;
-
 }
 
 
 sub to_string {
-	
 	my $self = shift @_;
-	
 	return "[UBSplicer at " . $self->basedir() . "]";
-	
 }
 
 

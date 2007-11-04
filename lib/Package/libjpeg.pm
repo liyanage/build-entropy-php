@@ -26,16 +26,16 @@ sub filename {
 #http://www.ijg.org/files/jpegsrc.v6b.tar.gz
 
 
-sub build {
-
-	my $self = shift @_;
-	return undef unless ($self->SUPER::build(@_));
-	my $prefix = $self->config()->prefix();
-	$self->cd_packagesrcdir();
-	$self->shell(qq!CFLAGS="-arch ppc -arch i386" ./configure ! . $self->configure_flags());
-	$self->shell($self->make_command());
-	
-}
+# sub build {
+# 
+# 	my $self = shift @_;
+# 	return undef unless ($self->SUPER::build(@_));
+# 	my $prefix = $self->config()->prefix();
+# 	$self->cd_packagesrcdir();
+# 	$self->shell(qq!CFLAGS="-arch ppc -arch i386" ./configure ! . $self->configure_flags());
+# 	$self->shell($self->make_command());
+# 	
+# }
 
 
 

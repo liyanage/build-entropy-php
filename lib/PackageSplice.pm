@@ -31,8 +31,9 @@ sub build {
 	
 	my $shortname = $self->shortname();
 	my $splice_dir = $self->splice_dir();
-
-	foreach my $arch (qw(i386 ppc)) {
+	
+	#ppc
+	foreach my $arch (qw(i386 x86_64 ppc7400 ppc64)) {
 		
 		$self->cd_packagesrcdir();
 		$self->cleanup_srcdir() if (-e "Makefile");
@@ -99,24 +100,12 @@ sub build_arch_make {
 
 
 sub make_install_arch {
-
 	my $self = shift @_;
 	my (%args) = @_;
-
 	my $install_override = $self->make_install_override_list(prefix => $args{prefix});
 	$self->shell($self->make_command() . " $install_override install");
-
 }
 
-
-sub make_install_override_list {
-
-	my $self = shift @_;
-	my (%args) = @_;
-	my $extdir = $self->config()->extdir();
-	return "prefix=$args{prefix} exec_prefix=$args{prefix} bindir=$args{prefix}/bin sbindir=$args{prefix}/sbin sysconfdir=$args{prefix}/etc datadir=$args{prefix}/share includedir=$args{prefix}/include libdir=$args{prefix}/lib libexecdir=$args{prefix}/libexec localstatedir=$args{prefix}/var sharedstatedir=$args{prefix}/com mandir=$args{prefix}/man infodir=$args{prefix}/info EXTENSION_DIR=$args{prefix}/$extdir";
-
-}
 
 
 

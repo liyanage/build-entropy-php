@@ -3,18 +3,14 @@ package Package::mysql;
 use strict;
 use warnings;
 
-use base qw(PackageSplice);
+use base qw(Package);
 
-our $VERSION = '5.0.24a';
+our $VERSION = '5.0.45';
 
 sub init {
-
 	my $self = shift @_;
-
 	$self->SUPER::init(@_);
-	
 	$self->config()->mysql_install_prefix($self->install_prefix());
-
 }
 
 
@@ -34,44 +30,40 @@ sub subpath_for_check {
 }
 
 
-# sub install_prefix {
-# 	my $self = shift @_;
-# 	return $self->install_tmp_prefix() . "/mysql";
-# }
-# 
 
 
-sub install {
-
+sub configure_flags {
 	my $self = shift @_;
-
-	return undef unless ($self->SUPER::install());
-
-# 	$self->log("removing dynamic libraries to force static link");
-# 	$self->shell("rm " . $self->install_prefix() . "/lib/mysql/*.dylib");
-# 	$self->shell("ranlib " . $self->install_prefix() . "/lib/mysql/*.a");
-
-	return 1;
+	return $self->SUPER::configure_flags(@_) . " --without-server --enable-thread-safe-client";
 }
 
-sub make_command {
+
+sub make_install_sourcedirs {
 	my $self = shift @_;
-	return $self->SUPER::make_command() . " -j 1"
+	return map {$self->packagesrcdir() . "/$_"} qw(include libmysql scripts);
 }
 
 
 
 sub php_extension_configure_flags {
-
 	my $self = shift @_;
 	my (%args) = @_;
-
 	my $mysql_prefix = $self->config()->mysql_install_prefix();
 	die "mysql install prefix '$mysql_prefix' does not exist" unless (-d $mysql_prefix);
-
 	return "--with-mysql=shared,$mysql_prefix --with-mysqli=shared,$mysql_prefix/bin/mysql_config --with-pdo-mysql=shared,$mysql_prefix";
-
 }
+
+
+
+
+sub install {
+	my $self = shift @_;
+	$self->SUPER::install(@_);
+	$self->cd_packagesrcdir();
+	my $prefix = $self->config()->prefix();
+	$self->shell("cp include/mysqld_error.h $prefix/include/mysql");
+}
+
 
 
 

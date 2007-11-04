@@ -42,7 +42,6 @@ sub php_build_arch_pre {
 	my $self = shift @_;
 	my (%args) = @_;
 
-	# unpack json distribution
 	$self->shell("rm -rf memcache");
 	my $tarball = $self->download_path();
 	$self->shell("tar -xzvf $tarball");

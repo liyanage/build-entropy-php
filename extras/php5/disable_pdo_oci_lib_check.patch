@@ -1,0 +1,12 @@
+diff -ru php-5.2.4RC2.ORIG/ext/pdo_oci/config.m4 php-5.2.4RC2/ext/pdo_oci/config.m4
+--- php-5.2.4RC2.ORIG/ext/pdo_oci/config.m4	2007-08-14 14:15:04.000000000 +0200
++++ php-5.2.4RC2/ext/pdo_oci/config.m4	2007-08-19 11:46:31.000000000 +0200
+@@ -78,7 +78,7 @@
+     AC_MSG_RESULT([yes])
+   fi
+ 
+-  AC_PDO_OCI_CHECK_LIB_DIR($PDO_OCI_DIR)
++#  AC_PDO_OCI_CHECK_LIB_DIR($PDO_OCI_DIR)
+ 
+   if test "instantclient" = "`echo $PDO_OCI_DIR | cut -d, -f1`" ; then
+     PDO_OCI_IC_PREFIX="`echo $PDO_OCI_DIR | cut -d, -f2`"

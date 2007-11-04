@@ -3,9 +3,9 @@ package Package::libxslt;
 use strict;
 use warnings;
 
-use base qw(PackageSplice);
+use base qw(Package);
 
-our $VERSION = '1.1.17';
+our $VERSION = '1.1.22';
 
 
 
@@ -33,8 +33,7 @@ sub subpath_for_check {
 
 sub configure_flags {
 	my $self = shift @_;
-	
-	return $self->SUPER::configure_flags() . " --with-libxml-prefix=" . $self->install_prefix();
+	return $self->SUPER::configure_flags() . " --without-python --with-libxml-prefix=" . $self->install_prefix();
 
 }
 

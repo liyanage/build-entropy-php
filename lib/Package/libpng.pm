@@ -3,9 +3,9 @@ package Package::libpng;
 use strict;
 use warnings;
 
-use base qw(PackageSplice);
+use base qw(Package);
 
-our $VERSION = '1.2.8';
+our $VERSION = '1.2.22';
 
 
 sub base_url {
@@ -14,7 +14,7 @@ sub base_url {
 
 
 sub packagename {
-	return "libpng-$VERSION-config";
+	return "libpng-$VERSION";
 }
 
 
@@ -28,16 +28,12 @@ sub configure_flags {
 	return $self->SUPER::configure_flags(@_) . " --without-x";
 }
 
-sub php_extension_configure_flags {
 
+sub php_extension_configure_flags {
 	my $self = shift @_;
 	my (%args) = @_;
-
 	return "--with-png-dir=" . $self->config()->prefix();
-
 }
-
-
 
 
 

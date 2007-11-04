@@ -167,11 +167,8 @@ sub pkg_filename {
 
 
 sub is_packaged {
-
 	my $self = shift @_;
-	
 	return undef;
-
 }
 
 
@@ -183,25 +180,18 @@ sub package_filelist {
 }
 
 
-
-
 # subclasses should override and call this and do
 # nothing if this does not return true
 #
 sub build {
-
 	my $self = shift @_;
 	return undef if ($self->is_built());
-
 	$self->unpack();
-
 	$_->install() foreach $self->dependencies();
-
 	$self->log("building");
-	
 	return 1;
-
 }
+
 
 sub is_built {
 	my $self = shift @_;
@@ -279,7 +269,28 @@ sub unpack {
 	$self->log('unpacking');
 	$self->cd_srcdir();
 	$self->shell('tar -xzf', $self->download_path());
+	$self->patch();
 
+}
+
+
+sub patch {
+	my $self = shift @_;
+
+	my @patchfiles = $self->patchfiles();
+	return unless @patchfiles;
+
+	$self->cd_packagesrcdir();
+	foreach my $patchfile (@patchfiles) {
+		my $path = $self->extras_path($patchfile);
+		die "patch file '$patchfile' not found in package extras dir" unless (-f $path);
+		$self->shell("patch -p1 < $path");
+	}
+	
+}
+
+sub patchfiles {
+	return ();
 }
 
 
@@ -306,23 +317,30 @@ sub cd_packagesrcdir {
 
 
 sub make_flags {
-
 	my $self = shift @_;
-
 	my $cpus = $self->config()->cpus();
 	return $cpus > 1 ? " -j $cpus " : "";
-
 }
 
 sub make_command {
 	my $self = shift @_;
-	return "make" . $self->make_flags();
+	return "MACOSX_DEPLOYMENT_TARGET=10.5 make " . $self->make_flags();
 }
+
+
+sub make_install_override_list {
+	my $self = shift @_;
+	my (%args) = @_;
+	my $extdir = $self->config()->extdir();
+	return "prefix=$args{prefix} exec_prefix=$args{prefix} bindir=$args{prefix}/bin sbindir=$args{prefix}/sbin sysconfdir=$args{prefix}/etc datadir=$args{prefix}/share includedir=$args{prefix}/include libdir=$args{prefix}/lib libexecdir=$args{prefix}/libexec localstatedir=$args{prefix}/var sharedstatedir=$args{prefix}/com mandir=$args{prefix}/man infodir=$args{prefix}/info EXTENSION_DIR=$args{prefix}/$extdir";
+}
+
+
 
 
 sub configure_flags {
 	my $self = shift @_;
-	return "--prefix=" . $self->install_prefix();
+	return "--disable-dependency-tracking --prefix=" . $self->install_prefix();
 }
 
 
@@ -340,61 +358,59 @@ sub shortname {
 
 
 sub to_string {
-
 	my $self = shift @_;
-
 	my $shortname = $self->shortname();
 	return "[package $shortname]";
-
 }
 
 
 
 sub extras_dir {
-
 	my $self = shift @_;
-
 	return $self->config()->basedir() . '/extras/' . $self->shortname();	
-
 }
 
 
 
 sub extras_path {
-
 	my $self = shift @_;
 	my ($filename) = @_;
-	
 	return $self->extras_dir() . "/$filename";
-
 }
 
 
 sub cflags {
-
 	my $self = shift @_;
-
-	return '';
-	
+	return $self->compiler_archflags();
 }
 
 
 sub ldflags {
-
 	my $self = shift @_;
-
-	return '';
-	
+	my $prefix = $self->config()->prefix();
+	return "-L$prefix/lib " . $self->compiler_archflags();
 }
 
 
+sub cc {
+	my $self = shift @_;
+	# this is a hack to override the shipping iconv.h header file with the one
+	# from the darwin source. Fix taken from:
+	# http://gorn.ch/archive/2007/11/01/leopard-native-apache-with-custom-64bit-php.html
+	my $iconv_include_override_dir = $self->config()->basedir() . "/extras/iconv/leopard-iconv-include-override";
+	return "cc -I$iconv_include_override_dir";
+}
+
+
+sub compiler_archflags {
+	my $self = shift @_;
+	return join " ", map {"-arch $_"} $self->all_archs();
+}
 
 
 sub install_prefix {
-
 	my $self = shift @_;
 	return $self->config()->prefix();
-	
 }
 
 # prefix for packages we don't want to bundle
@@ -408,28 +424,21 @@ sub install_tmp_prefix {
 
 
 sub supported_archs {
-
-	return qw(ppc i386);
-
+	return qw(i386 x86_64 ppc7400 ppc64);
 }
+
 
 sub supports_arch {
-
 	my $self = shift @_;
 	my ($arch) = @_;
-	
 	return grep {$_ eq $arch} $self->supported_archs();
-
 }
-
-
 
 
 
 sub php_extension_configure_flags {
 	return "";
 }
-
 
 
 
@@ -441,6 +450,13 @@ sub php_dso_extension_names {
 
 sub php_build_arch_pre {
 }
+
+
+sub all_archs {
+	return qw(i386 x86_64 ppc7400 ppc64);
+}
+
+
 
 
 

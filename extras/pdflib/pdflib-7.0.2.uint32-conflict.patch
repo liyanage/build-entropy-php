@@ -1,0 +1,13 @@
+diff -ru PDFlib-Lite-7.0.2/libs/tiff/tiff.h PDFlib-Lite-7.0.2.entropy/libs/tiff/tiff.h
+--- PDFlib-Lite-7.0.2/libs/tiff/tiff.h	2007-08-13 12:52:43.000000000 +0200
++++ PDFlib-Lite-7.0.2.entropy/libs/tiff/tiff.h	2007-10-29 22:52:26.000000000 +0100
+@@ -79,7 +79,8 @@
+     typedef	unsigned int uint32;	/* sizeof (uint32) must == 4 */
+     #else
+     typedef	long int32;
+-    typedef	unsigned long uint32;	/* sizeof (uint32) must == 4 */
++    typedef unsigned int uint32_t;
++    typedef uint32_t uint32;
+     #endif
+ #endif
+ 

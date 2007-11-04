@@ -5,14 +5,15 @@ use warnings;
 
 use base qw(PackageSplice);
 
-our $VERSION = '6.0.3';
+# make sure to check version number in base_url path and PECL wrapper in build_arch_post, 
+our $VERSION = '7.0.2';
 
 
 
 
 sub base_url {
 	my $self = shift;
-	return "http://www.pdflib.com/products/pdflib/download/603src";
+	return "http://www.pdflib.com/binaries/PDFlib/702";
 }
 
 
@@ -40,8 +41,17 @@ sub build_arch_post {
 	# architecture
 	my $prefix = $self->config()->prefix();
 	$self->cd('libs/pdflib');
-	$self->shell("cc -arch $args{arch} -dynamiclib -flat_namespace -undefined suppress -o .libs/libpdf.*.*.*.dylib ./pdflib.lo -all_load  ../../libs/pdcore/.libs/libpdcore.al ../../libs/png/.libs/libpng.al ../../libs/flate/.libs/libz.al ../../libs/tiff/.libs/libtiff.al ../../libs/jpeg/.libs/libjpeg.al ../../libs/pdflib/.libs/libpdf_.al  -lc -install_name '$prefix'/lib/libpdf.5.dylib -compatibility_version 6 -current_version 6.3 -framework ApplicationServices");
+#	$self->shell("cc -arch $args{arch} -dynamiclib -flat_namespace -undefined suppress -o .libs/libpdf.*.*.*.dylib ./pdflib.lo -all_load  ../../libs/pdcore/.libs/libpdcore.al ../../libs/png/.libs/libpng.al ../../libs/flate/.libs/libz.al ../../libs/tiff/.libs/libtiff.al ../../libs/jpeg/.libs/libjpeg.al ../../libs/pdflib/.libs/libpdf_.al  -lc -install_name '$prefix'/lib/libpdf.5.dylib -compatibility_version 6 -current_version 6.3 -framework ApplicationServices");
 
+	# new for pdflib 7
+	$self->shell("gcc -arch $args{arch} -dynamiclib -flat_namespace -undefined suppress -o .libs/libpdf.*.*.*.dylib  ./pdflib.lo -all_load  ../../libs/pdflib/.libs/libpdf_.al ../../libs/font/.libs/libfont.al ../../libs/pdcore/.libs/libpdcore.al ../../libs/png/.libs/libpng.al ../../libs/flate/.libs/libz.al ../../libs/tiff/.libs/libtiff.al ../../libs/jpeg/.libs/libjpeg.al  -lc -install_name '$prefix'/lib/libpdf.6.dylib -compatibility_version 7 -current_version 7.2 -framework ApplicationServices");
+
+}
+
+
+sub patchfiles {
+	my $self = shift @_;
+	return qw(pdflib-7.0.2.uint32-conflict.patch);
 }
 
 
@@ -82,7 +92,7 @@ sub php_build_arch_pre {
 
 	# replace pdflib extension module source with newer version
 	$self->shell("rm -rf pdf");
-	my $pdflib_extension_tarball = $self->extras_dir() . "/pdflib-2.1.2.tgz";
+	my $pdflib_extension_tarball = $self->extras_dir() . "/pdflib-2.1.4.tgz";
 	die "pdflib extensions tarball '$pdflib_extension_tarball' does not exist" unless (-f $pdflib_extension_tarball);
 	$self->shell("tar -xzvf $pdflib_extension_tarball");
 	$self->shell("mv pdflib-2.*.* pdf; rm package.xml");
