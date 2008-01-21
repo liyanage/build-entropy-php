@@ -61,6 +61,17 @@ sub package_filelist {
 
 
 
+# sub configure_flags {
+# 	my $self = shift @_;
+# 	return $self->SUPER::configure_flags() . ' --disable-depend';
+# }
+
+sub configure_flags {
+	my $self = shift @_;
+	return "--disable-depend --prefix=" . $self->install_prefix();
+}
+
+
 
 
 1;

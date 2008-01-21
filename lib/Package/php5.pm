@@ -116,13 +116,13 @@ sub configure_flags {
 
 
 
-sub build_postconfigure {
-	my $self = shift @_;
-	my (%args) = @_;
+#sub build_postconfigure {
+#	my $self = shift @_;
+#	my (%args) = @_;
 
-	my $path = $self->extras_path('php-configure-time-endianness-check-fix.c');
-	$self->shell("(cat '$path' >> main/php_config.h)");
-}
+#	my $path = $self->extras_path('php-configure-time-endianness-check-fix.c');
+#	$self->shell("(cat '$path' >> main/php_config.h)");
+#}
 
 
 

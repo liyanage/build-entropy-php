@@ -10,9 +10,9 @@ our $VERSION = '0.16.1';
 
 
 
-# sub dependency_names {
-# 	return qw(iconv);
-# }
+#sub dependency_names {
+#	return qw(iconv);
+#}
 
 sub base_url {
 	return "ftp://sunsite.cnlab-switch.ch/mirror/gnu/gettext";
@@ -36,7 +36,8 @@ sub php_extension_configure_flags {
 	my $self = shift @_;
 	my (%args) = @_;
 
-	return "--with-gettext=shared," . $self->config()->prefix();
+#	return "--with-gettext=shared," . $self->config()->prefix();
+	return "--with-gettext=" . $self->config()->prefix();
 
 }
 
@@ -53,10 +54,10 @@ sub configure_flags {
 }
 
 
-sub php_dso_extension_names {
-	my $self = shift @_;
-	return $self->shortname();
-}
+#sub php_dso_extension_names {
+#	my $self = shift @_;
+#	return $self->shortname();
+#}
 
 
 
@@ -75,11 +76,15 @@ sub package_filelist {
 
 	my $self = shift @_;
 
-	return $self->config()->extdir_path('gettext.so'), qw(
-		lib/libgettext*.dylib lib/libasprintf*.dylib lib/libintl*.dylib
-		php.d/50-extension-gettext.ini share/gettext
-	);
+#	return $self->config()->extdir_path('gettext.so'), qw(
+#		lib/libgettext*.dylib lib/libasprintf*.dylib lib/libintl*.dylib
+#		php.d/50-extension-gettext.ini share/gettext
+#	);
 	
+	return qw(
+		lib/libgettext*.dylib lib/libasprintf*.dylib lib/libintl*.dylib
+		share/gettext
+	);
 }
 
 

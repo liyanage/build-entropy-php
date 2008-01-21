@@ -1,4 +1,3 @@
-
 # Main driver script for the PHP build process
 #
 # Invoke with
@@ -11,13 +10,9 @@ use warnings;
 use Imports;
 use Package::php5;
 
-use Package::libxml2;
-#use Package::libxslt;
-#use Package::mcrypt;
-
 
 my $config = Config->new(
-	basedir              => '/Users/liyanage/Desktop/universalbuild/universalbuild',
+	basedir              => '/Users/liyanage/svn/entropy/universalbuild',
 	prefix               => '/usr/local/php5',
 	orahome              => '/Users/liyanage/svn/entropy/universalbuild/install',
 	pdflib_lite          => 1,
@@ -33,17 +28,27 @@ my $config = Config->new(
 			suffix       => '-apache2',
 		},
 	},
-	version              => '5.2.4',
-	release              => 4,
+	version              => '5.2.5',
+	release              => 2,
+	debug                => 1,
 );
 
 #my $php5 = Package::php5->new(config => $config, variant => 'apache2');
 #$php5->create_distimage();
 
 
-#my $p = Package::php5->new(config => $config, variant => 'apache2');
-my $p = Package::libxml2->new(config => $config, variant => 'apache2');
+my $p = Package::php5->new(config => $config, variant => 'apache2');
 $p->install();
+
+
+# use Package::postgresql;
+# my $p = Package::postgresql->new(config => $config, variant => 'apache2');
+# $p->install();
+
+
+# use Package::mysql;
+# my $p = Package::mysql->new(config => $config, variant => 'apache2');
+# $p->install();
 
 
 

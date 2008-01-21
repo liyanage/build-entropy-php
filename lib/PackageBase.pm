@@ -381,7 +381,8 @@ sub extras_path {
 
 sub cflags {
 	my $self = shift @_;
-	return $self->compiler_archflags();
+	my $debugflag = $self->config()->debug() ? '-g ' : '';
+	return "$debugflag -I/usr/local/php5/include " . $self->compiler_archflags();
 }
 
 
@@ -399,6 +400,7 @@ sub cc {
 	# http://gorn.ch/archive/2007/11/01/leopard-native-apache-with-custom-64bit-php.html
 	my $iconv_include_override_dir = $self->config()->basedir() . "/extras/iconv/leopard-iconv-include-override";
 	return "cc -I$iconv_include_override_dir";
+	return "cc";
 }
 
 
