@@ -3,9 +3,9 @@ package Package::memcache;
 use strict;
 use warnings;
 
-use base qw(PackageSplice);
+use base qw(Package);
 
-our $VERSION = '2.0.4';
+our $VERSION = '2.2.2';
 
 
 

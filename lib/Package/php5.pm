@@ -26,18 +26,18 @@ sub packagename {
 
 
 sub dependency_names {
-	#imapcclient
 	#pdflib_commercial
 	#oracleinstantclient
 	#tidy
 	#pdflib
 	#iodbc t1lib
 	#ming mhash mssql frontbase 
-	#memcache openbase
+	#openbase
+	#memcache
 	#json
 	
 	#iconv
-	return qw(libxml2 libxslt gettext curl libpng libjpeg libfreetype mysql postgresql mcrypt);
+	return qw(memcache imapcclient libxml2 libxslt gettext curl libpng libjpeg libfreetype mysql postgresql mcrypt);
 }
 
 
@@ -86,6 +86,7 @@ sub configure_flags {
  		'--enable-memory-limit',
  		'--enable-mbstring',
  		'--enable-bcmath',
+ 		'--enable-calendar',
 	);
 
 #		'--with-snmp=/usr', #32 bit only in leopard
@@ -93,7 +94,6 @@ sub configure_flags {
 
 # 		"--enable-dbx",
 # 		"--enable-dbase",
-# 		"--enable-calendar",
 # 		"--with-bz2=/usr",
 # 		"--enable-fastcgi",
 # 		"--enable-cgi",

@@ -5,7 +5,8 @@ use warnings;
 
 use base qw(Package);
 
-our $VERSION = '2004g';
+our $VERSION = '2007';
+#our $VERSION = '2004g';
 #our $VERSION = '2006a';
 
 
@@ -28,11 +29,12 @@ sub filename {
 sub build {
 
 	my $self = shift @_;
-	return undef unless ($self->SUPER::build(@_));
+#	return undef unless ($self->SUPER::build(@_));
 	
 	$self->cd_packagesrcdir();
-	$self->shell(qq!EXTRACFLAGS="-arch ppc -arch i386 -Dcheckpw=php_imap_checkpw" make -e osx!);
-	
+	my $cflags = $self->cflags();
+	$self->shell(qq(MACOSX_DEPLOYMENT_TARGET=10.5 EXTRACFLAGS="$cflags" make -e oxp));
+#-Dcheckpw=php_imap_checkpw	
 }
 
 
@@ -45,7 +47,7 @@ sub is_built {
 sub install {
 	my $self = shift @_;
 	# this package is never installed
-	return $self->SUPER::install(@_);
+#	return $self->SUPER::install(@_);
 }
 
 sub is_installed {
