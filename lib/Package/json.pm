@@ -3,7 +3,7 @@ package Package::json;
 use strict;
 use warnings;
 
-use base qw(PackageSplice);
+use base qw(Package);
 
 our $VERSION = '1.2.1';
 
