@@ -3,7 +3,7 @@ package Package::mssql;
 use strict;
 use warnings;
 
-use base qw(PackageSplice);
+use base qw(Package);
 
 our $VERSION = '0.64';
 
@@ -19,28 +19,36 @@ sub packagename {
 }
 
 
-
 sub subpath_for_check {
 	return "lib/libtds.dylib";
 }
 
 
-
 sub php_extension_configure_flags {
-
 	my $self = shift @_;
 	my (%args) = @_;
-
 	return "--with-mssql=shared," . $self->config()->prefix();
-
 }
-
-
 
 
 sub php_dso_extension_names {
 	my $self = shift @_;
 	return $self->shortname();
+}
+
+
+sub build_configure {
+	my $self = shift @_;
+
+	my $cflags = $self->cflags();
+	my $ldflags = $self->ldflags();
+	my $cxxflags = $self->compiler_archflags();
+	my $archflags = $self->compiler_archflags();
+	my $cc = $self->cc();
+
+	my $prefix = $self->config()->prefix();
+	$self->shell(qq(MACOSX_DEPLOYMENT_TARGET=10.5 CFLAGS="$cflags" LDFLAGS='$ldflags' CXXFLAGS='$cxxflags' CC='$cc $archflags' CPP='cpp' ./configure ) . $self->configure_flags());
+
 }
 
 

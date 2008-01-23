@@ -45,15 +45,12 @@ sub build {
 	return unless ($self->SUPER::build(@_));
 	my (%args) = @_;
 
-	my $cflags = $self->cflags();
-	my $ldflags = $self->ldflags();
-	my $cxxflags = $self->compiler_archflags();
-	my $archflags = $self->compiler_archflags();
-	my $cc = $self->cc();
+	$self->build_preconfigure();
 
 	$self->cd_packagesrcdir();
-	my $prefix = $self->config()->prefix();
-	$self->shell(qq(MACOSX_DEPLOYMENT_TARGET=10.5 CFLAGS="$cflags" LDFLAGS='$ldflags' CXXFLAGS='$cxxflags' CC='$cc' ./configure ) . $self->configure_flags());
+
+	$self->build_configure();
+
 	$self->build_postconfigure(%args);
 
 	foreach my $dir ($self->build_sourcedirs()) {
@@ -65,12 +62,33 @@ sub build {
 }
 
 
-sub build_postconfigure {
+sub build_configure {
+	my $self = shift @_;
+
+	my $cflags = $self->cflags();
+	my $ldflags = $self->ldflags();
+	my $cxxflags = $self->compiler_archflags();
+	my $archflags = $self->compiler_archflags();
+	my $cc = $self->cc();
+
+	my $prefix = $self->config()->prefix();
+	$self->shell(qq(MACOSX_DEPLOYMENT_TARGET=10.5 CFLAGS="$cflags" LDFLAGS='$ldflags' CXXFLAGS='$cxxflags' CC='$cc' ./configure ) . $self->configure_flags());
+
+}
+
+
+
+
+sub build_preconfigure {
 	my $self = shift @_;
 	my (%args) = @_;
 }
 
 
+sub build_postconfigure {
+	my $self = shift @_;
+	my (%args) = @_;
+}
 
 
 

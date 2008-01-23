@@ -1,0 +1,13 @@
+diff -ru php-5.2.5/ext/imap/php_imap.c php-5.2.5-imapfix/ext/imap/php_imap.c
+--- php-5.2.5/ext/imap/php_imap.c	2007-07-31 02:31:10.000000000 +0200
++++ php-5.2.5-imapfix/ext/imap/php_imap.c	2008-01-23 23:55:33.000000000 +0100
+@@ -2209,7 +2209,7 @@
+ #ifndef HAVE_NEW_MIME2TEXT
+ 	utf8_mime2text(&src, &dest);
+ #else
+-	utf8_mime2text(&src, &dest, U8T_CANONICAL);
++	utf8_mime2text(&src, &dest, 0);
+ #endif
+ 	RETVAL_STRINGL(dest.data, dest.size, 1);
+ 	if (dest.data) {
+

@@ -10,17 +10,11 @@ our $VERSION = '0.0';
 
 
 sub php_extension_configure_flags {
-
 	my $self = shift @_;
 	my (%args) = @_;
-
 	my $prefix = $self->config()->prefix();
-
 	return "--with-tidy=shared,/usr";
-
 }
-
-
 
 
 sub php_dso_extension_names {
@@ -29,20 +23,10 @@ sub php_dso_extension_names {
 }
 
 
-
 sub package_filelist {
-
 	my $self = shift @_;
-
 	return qw(lib/php/extensions/no-debug-non-zts-20050922/tidy php.d/50-extension-tidy.ini);
-	
 }
-
-
-
-
-
-
 
 
 

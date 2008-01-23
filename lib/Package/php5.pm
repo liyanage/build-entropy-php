@@ -28,16 +28,13 @@ sub packagename {
 sub dependency_names {
 	#pdflib_commercial
 	#oracleinstantclient
-	#tidy
 	#pdflib
 	#iodbc t1lib
-	#ming mhash mssql frontbase 
+	#ming frontbase 
 	#openbase
-	#memcache
-	#json
 	
-	#iconv
-	return qw(memcache imapcclient libxml2 libxslt gettext curl libpng libjpeg libfreetype mysql postgresql mcrypt);
+	#tidy 
+	return qw(ming mssql mhash memcache imapcclient libxml2 libxslt gettext curl libpng libjpeg libfreetype mysql postgresql mcrypt);
 }
 
 
@@ -123,6 +120,33 @@ sub configure_flags {
 #	my $path = $self->extras_path('php-configure-time-endianness-check-fix.c');
 #	$self->shell("(cat '$path' >> main/php_config.h)");
 #}
+
+
+
+
+sub build_preconfigure {
+	my $self = shift @_;
+	my (%args) = @_;
+
+	# give extension modules a chance to tweak the contents of the ext directory
+	foreach my $dependency ($self->dependencies()) {
+		$self->cd_packagesrcdir();
+		$self->cd('ext');
+		$dependency->php_build_pre(%args, php_package => $self);
+	}
+
+	$self->cd_packagesrcdir();
+	$self->shell("aclocal");
+	$self->shell("./buildconf --force");
+	$self->shell({fatal => 0}, "ranlib " . $self->install_prefix() . "/lib/*.a");
+	$self->shell({fatal => 0}, "ranlib " . $self->install_tmp_prefix() . "/lib/*.a");
+
+}
+
+
+	
+
+
 
 
 
@@ -255,7 +279,8 @@ sub create_distimage {
 
 sub patchfiles {
 	my $self = shift @_;
-	return qw(php-entropy.patch);
+#	return qw(php-entropy.patch);
+	return qw(php-entropy.patch php-entropy-imap.patch);
 }
 
 

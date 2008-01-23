@@ -3,9 +3,9 @@ package Package::mhash;
 use strict;
 use warnings;
 
-use base qw(PackageSplice);
+use base qw(Package);
 
-our $VERSION = '0.9.6';
+our $VERSION = '0.9.9';
 
 
 
@@ -19,23 +19,16 @@ sub packagename {
 }
 
 
-
 sub subpath_for_check {
 	return "lib/libmhash.dylib";
 }
 
 
-
 sub php_extension_configure_flags {
-
 	my $self = shift @_;
 	my (%args) = @_;
-
 	return "--with-mhash=shared," . $self->config()->prefix();
-
 }
-
-
 
 
 sub php_dso_extension_names {
@@ -44,19 +37,13 @@ sub php_dso_extension_names {
 }
 
 
-
-
 sub package_filelist {
-
 	my $self = shift @_;
-
 	return $self->config()->extdir_path('mhash'), qw(
 		lib/libmhash*.dylib
 		php.d/50-extension-mhash.ini
 	);
-	
 }
-
 
 
 

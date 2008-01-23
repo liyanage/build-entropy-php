@@ -37,7 +37,7 @@ sub is_installed {
 }
 
 
-sub php_build_arch_pre {
+sub php_build_pre {
 
 	my $self = shift @_;
 	my (%args) = @_;

@@ -423,6 +423,8 @@ sub install_tmp_prefix {
 	
 }
 
+sub php_build_pre {
+}
 
 
 sub supported_archs {
