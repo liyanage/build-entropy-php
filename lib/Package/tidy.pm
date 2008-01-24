@@ -3,7 +3,7 @@ package Package::tidy;
 use strict;
 use warnings;
 
-use base qw(PackageSystemProvided);
+use base qw(Package);
 
 our $VERSION = '0.0';
 

@@ -29,7 +29,7 @@ my $config = Config->new(
 		},
 	},
 	version              => '5.2.5',
-	release              => 6,
+	release              => 7,
 	debug                => 1,
 );
 

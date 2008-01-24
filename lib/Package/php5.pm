@@ -26,11 +26,12 @@ sub packagename {
 
 
 sub dependency_names {
-	#pdflib_commercial
 	#oracleinstantclient
+	#pdflib_commercial
 	#pdflib
-	#iodbc t1lib
-	#ming frontbase 
+	#iodbc
+	#t1lib
+	#frontbase 
 	#openbase
 	
 	#tidy 
@@ -84,6 +85,7 @@ sub configure_flags {
  		'--enable-mbstring',
  		'--enable-bcmath',
  		'--enable-calendar',
+ 		'--with-iodbc',
 	);
 
 #		'--with-snmp=/usr', #32 bit only in leopard
