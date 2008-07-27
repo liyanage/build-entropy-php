@@ -247,21 +247,16 @@ sub is_downloaded {
 
 
 sub download {
-
 	my $self = shift @_;
-
 	$_->download() foreach $self->dependencies();
-
 	return if ($self->is_downloaded());
 	$self->log("downloading $self from " . $self->url());
 	$self->shell('curl', '-o', $self->download_path(), $self->url());
-
 }
 
 
 
 sub unpack {
-
 	my $self = shift @_;
 
 	return if ($self->is_unpacked());
@@ -382,7 +377,8 @@ sub extras_path {
 sub cflags {
 	my $self = shift @_;
 	my $debugflag = $self->config()->debug() ? '-g ' : '';
-	return "$debugflag -I/usr/local/php5/include " . $self->compiler_archflags();
+	my $prefix = $self->config()->prefix();
+	return "$debugflag -I$prefix/include " . $self->compiler_archflags();
 }
 
 

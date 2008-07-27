@@ -9,7 +9,9 @@ our $VERSION = '0.3.0';
 #our $VERSION = '0.4.0.beta5';
 
 
-
+sub dependency_names {
+	return qw(libpng);
+}
 
 sub base_url {
 	return "http://switch.dl.sourceforge.net/sourceforge/ming";

@@ -26,42 +26,33 @@ sub filename {
 }
 
 
-sub build {
-
+sub make_command {
 	my $self = shift @_;
-#	return undef unless ($self->SUPER::build(@_));
-	
-	$self->cd_packagesrcdir();
 	my $cflags = $self->cflags();
-	$self->shell(qq(MACOSX_DEPLOYMENT_TARGET=10.5 EXTRACFLAGS="$cflags" make -e oxp));
-#-Dcheckpw=php_imap_checkpw	
+	return qq(MACOSX_DEPLOYMENT_TARGET=10.5 EXTRACFLAGS="$cflags" make -e oxp);
 }
 
 
-sub is_built {
+sub make_install_sourcedirs {
+	return ();
+}
+
+
+sub build_configure {
+}
+
+
+sub is_installed {
 	my $self = shift @_;
 	return -e $self->packagesrcdir() . "/c-client/c-client.a";
 }
 
 
-sub install {
-	my $self = shift @_;
-	# this package is never installed
-#	return $self->SUPER::install(@_);
-}
-
-sub is_installed {
-	return undef;
-}
-
-
 sub php_extension_configure_flags {
-
 	my $self = shift @_;
 	my (%args) = @_;
 	my $packagename = $self->packagename();
 	return "--with-imap=../$packagename --with-kerberos=/usr --with-imap-ssl=/usr";
-
 }
 
 

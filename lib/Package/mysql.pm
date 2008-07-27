@@ -7,6 +7,7 @@ use base qw(Package);
 
 our $VERSION = '5.0.45';
 
+
 sub init {
 	my $self = shift @_;
 	$self->SUPER::init(@_);
@@ -24,12 +25,9 @@ sub packagename {
 }
 
 
-
 sub subpath_for_check {
 	return "lib/mysql/libmysqlclient.dylib";
 }
-
-
 
 
 sub configure_flags {
@@ -44,7 +42,6 @@ sub make_install_sourcedirs {
 }
 
 
-
 sub php_extension_configure_flags {
 	my $self = shift @_;
 	my (%args) = @_;
@@ -52,8 +49,6 @@ sub php_extension_configure_flags {
 	die "mysql install prefix '$mysql_prefix' does not exist" unless (-d $mysql_prefix);
 	return "--with-mysql=shared,$mysql_prefix --with-mysqli=shared,$mysql_prefix/bin/mysql_config --with-pdo-mysql=shared,$mysql_prefix";
 }
-
-
 
 
 sub install {
@@ -65,19 +60,14 @@ sub install {
 }
 
 
-
-
 sub php_dso_extension_names {
 	my $self = shift @_;
 	return qw(mysql mysqli pdo_mysql);
 }
 
 
-
 sub package_filelist {
-
 	my $self = shift @_;
-
 	return
 		$self->config()->extdir_path('mysql'), 
 		$self->config()->extdir_path('mysqli'), 
@@ -86,7 +76,6 @@ sub package_filelist {
 			lib/mysql/lib*.dylib
 			php.d/50-extension-*mysql*.ini
 		);
-	
 }
 
 
