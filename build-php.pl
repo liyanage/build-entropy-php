@@ -13,9 +13,9 @@ use Package::php5;
 
 my $config = Config->new(
 	cpus                 => 2,
-	basedir              => '/Users/liyanage/svn/entropy/universalbuild',
+	basedir              => '/Users/joachim/Projects/Entropy/universalbuild',
 	prefix               => '/usr/local/php5',
-	orahome              => '/Users/liyanage/svn/entropy/universalbuild/install',
+	orahome              => '/Users/joachim/Projects/Entropy/universalbuild/install',
 	pdflib_lite          => 1,
 	mysql_install_prefix => undef,
 	variants             => {
@@ -28,17 +28,34 @@ my $config = Config->new(
 			suffix       => '-apache2',
 		},
 	},
-	version              => '5.2.5',
-	release              => 7,
+	version              => '5.2.9',
+	release              => 1,
 	debug                => 1,
 );
 
-#my $php5 = Package::php5->new(config => $config, variant => 'apache2');
-#$php5->create_distimage();
+# my $php5 = Package::php5->new(config => $config, variant => 'apache2');
+# $php5->create_distimage();
 
 my $p = Package::php5->new(config => $config, variant => 'apache2');
 $p->install();
 
+use Package::pdflib_commercial;
+$p = Package::pdflib_commercial->new(config => $config, variant => 'apache2');
+$p->prepackage_hook("/usr/local/php5");
+
+# use Package::pdflib;
+# my $p = Package::pdflib->new(config => $config, variant => 'apache2');
+# $p->install();
+
+
+# use Package::pdflib_commercial;
+# my $p = Package::pdflib_commercial->new(config => $config, variant => 'apache2');
+# $p->download();
+
+
+# use Package::mssql;
+# my $p = Package::mssql->new(config => $config, variant => 'apache2');
+# $p->install();
 
 
 # use Package::ming;
@@ -59,6 +76,3 @@ $p->install();
 # use Package::mysql;
 # my $p = Package::mysql->new(config => $config, variant => 'apache2');
 # $p->install();
-
-
-

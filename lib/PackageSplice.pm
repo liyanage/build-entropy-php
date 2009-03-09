@@ -11,11 +11,19 @@ our $VERSION = '1.0';
 
 
 
+sub init {
+	my $self = shift;
+	$self->SUPER::init(@_);
+	$self->{current_arch} = undef;
+}
+
+
 sub splice_dir {
 	my $self = shift @_;	
 	my $shortname = $self->shortname();
 	return "/tmp/universalbuild/$shortname";
 }
+
 
 sub splice_prefix {
 	my $self = shift @_;
@@ -61,42 +69,38 @@ sub build_arch_pre {}
 sub build_arch_post {}
 
 
-
 sub build_arch {
-
 	my $self = shift @_;
 	my (%args) = @_;
 
+	$self->{current_arch} = $args{arch};
 	my $cflags = $self->cflags();
 	my $ldflags = $self->ldflags();
 	$self->cd_packagesrcdir();
 	$self->shell("CFLAGS='$cflags' LDFLAGS='$ldflags' CC='cc -arch $args{arch} -DENTROPY_CH_RELEASE=" . $self->config()->release() . "' CXX='c++ -arch $args{arch}' ./configure " . $self->configure_flags(arch => $args{arch}));
 	$self->build_arch_make(%args);
+}
 
+
+sub compiler_archflags {
+	my $self = shift @_;
+	return "-arch " . $self->{current_arch};
 }
 
 
 sub cleanup_srcdir {
-
 	my $self = shift @_;
 	$self->cd_packagesrcdir();
 	$self->shell({fatal => 0}, 'make distclean');
-
 }
 
 
-
 sub build_arch_make {
-
 	my $self = shift @_;
 	my (%args) = @_;
 
 	$self->shell("make" . $self->make_flags());
-
 }
-
-
-
 
 
 sub make_install_arch {
