@@ -10,12 +10,14 @@ use warnings;
 use Imports;
 use Package::php5;
 
+my $basedir = $ENV{PWD};
+die "you must run this script in the build-entropy-php directory" unless ($basedir =~ m#/build-entropy-php$#);
 
 my $config = Config->new(
 	cpus                 => 2,
-	basedir              => '/Users/joachim/Projects/Entropy/universalbuild',
+	basedir              => $basedir,
 	prefix               => '/usr/local/php5',
-	orahome              => '/Users/joachim/Projects/Entropy/universalbuild/install',
+	orahome              => "$basedir/install",
 	pdflib_lite          => 1,
 	mysql_install_prefix => undef,
 	variants             => {
