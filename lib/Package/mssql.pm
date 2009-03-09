@@ -5,8 +5,7 @@ use warnings;
 
 use base qw(Package);
 
-our $VERSION = '0.64';
-
+our $VERSION = '0.82';
 
 
 sub base_url {
@@ -20,7 +19,7 @@ sub packagename {
 
 
 sub subpath_for_check {
-	return "lib/libtds.dylib";
+	return "lib/libsybdb.dylib";
 }
 
 
@@ -48,14 +47,10 @@ sub build_configure {
 
 	my $prefix = $self->config()->prefix();
 	$self->shell(qq(MACOSX_DEPLOYMENT_TARGET=10.5 CFLAGS="$cflags" LDFLAGS='$ldflags' CXXFLAGS='$cxxflags' CC='$cc $archflags' CPP='cpp' ./configure ) . $self->configure_flags());
-
 }
 
 
-
-
 sub package_filelist {
-
 	my $self = shift @_;
 
 	# the .so files as built by the FreeTDS build might be broken. might need to investigate.
@@ -64,7 +59,6 @@ sub package_filelist {
 		lib/libtds*.dylib lib/libct*.dylib lib/libsybdb*.dylib lib/libtdsodbc*.so lib/libtdssrv*.dylib
 		php.d/50-extension-mssql.ini
 	);
-	
 }
 
 

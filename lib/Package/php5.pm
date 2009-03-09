@@ -27,15 +27,14 @@ sub packagename {
 
 sub dependency_names {
 	#oracleinstantclient
-	#pdflib_commercial
-	#pdflib
 	#iodbc
 	#t1lib
 	#frontbase 
 	#openbase
-	
+	#pdflib
 	#tidy 
-	return qw(ming mssql mhash memcache imapcclient libxml2 libxslt gettext curl libpng libjpeg libfreetype mysql postgresql mcrypt);
+	#ming
+	return qw(pdflib_commercial mssql mhash memcache imapcclient libxml2 libxslt gettext curl libpng libjpeg libfreetype mysql postgresql mcrypt);
 }
 
 
@@ -286,14 +285,14 @@ sub patchfiles {
 }
 
 
-sub unpack {
-	my $self = shift @_;
-	$self->SUPER::unpack();
-	$self->cd_packagesrcdir();
-	$self->cd("ext");
-	my $mingtarball = $self->extras_path('ming.tar.gz');
-	$self->shell("tar -xzf $mingtarball");
-}
+# sub unpack {
+#   my $self = shift @_;
+#   $self->SUPER::unpack();
+#   $self->cd_packagesrcdir();
+#   $self->cd("ext");
+#   my $mingtarball = $self->extras_path('ming.tar.gz');
+#   $self->shell("tar -xzf $mingtarball");
+# }
 
 
 

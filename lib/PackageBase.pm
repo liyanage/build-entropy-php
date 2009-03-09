@@ -227,10 +227,10 @@ sub subpath_for_check {
 }
 
 
-
 sub dependency_names {
 	return ();
 }
+
 
 sub dependencies {
 	my $self = shift;
@@ -238,12 +238,10 @@ sub dependencies {
 }
 
 
-
 sub is_downloaded {
 	my $self = shift @_;
 	return -f $self->download_path()
 }
-
 
 
 sub download {
@@ -255,7 +253,6 @@ sub download {
 }
 
 
-
 sub unpack {
 	my $self = shift @_;
 
@@ -263,9 +260,21 @@ sub unpack {
 	$self->download();
 	$self->log('unpacking');
 	$self->cd_srcdir();
-	$self->shell('tar -xzf', $self->download_path());
+	$self->extract();
 	$self->patch();
+}
 
+
+sub is_unpacked {
+	my $self = shift @_;
+#	$self->log("is unpacked: " . $self->packagesrcdir() . ": " . -d $self->packagesrcdir());
+	return -d $self->packagesrcdir();
+}
+
+
+sub extract {
+	my $self = shift @_;
+	$self->shell('tar -xzf', $self->download_path());
 }
 
 
@@ -281,29 +290,19 @@ sub patch {
 		die "patch file '$patchfile' not found in package extras dir" unless (-f $path);
 		$self->shell("patch -p1 < $path");
 	}
-	
 }
+
 
 sub patchfiles {
 	return ();
 }
 
 
-
-
-sub is_unpacked {
-	my $self = shift @_;
-#	$self->log("is unpacked: " . $self->packagesrcdir() . ": " . -d $self->packagesrcdir());
-	return -d $self->packagesrcdir();
-}
-
-
-
-
 sub cd_srcdir {
 	my $self = shift @_;
 	$self->cd($self->config()->srcdir());
 }
+
 
 sub cd_packagesrcdir {
 	my $self = shift @_;
