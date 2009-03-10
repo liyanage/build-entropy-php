@@ -10,7 +10,8 @@ use warnings;
 use Imports;
 use Package::php5;
 
-my $basedir = $ENV{PWD};
+my $basedir = qx(pwd);
+chomp $basedir;
 die "you must run this script in the build-entropy-php directory" unless ($basedir =~ m#/build-entropy-php$#);
 
 my $config = Config->new(
