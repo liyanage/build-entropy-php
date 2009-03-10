@@ -21,7 +21,7 @@ sub init {
 sub splice_dir {
 	my $self = shift @_;	
 	my $shortname = $self->shortname();
-	return "/tmp/universalbuild/$shortname";
+	return "/tmp/build-entropy-php/$shortname";
 }
 
 

@@ -366,7 +366,7 @@ sub create_metapackage {
 
 	$self->log("metapackaging");
 	
-#	my $dir = "/tmp/universalbuild-pkg/" . $self->shortname() . '-meta';
+#	my $dir = "/tmp/build-entropy-php-pkg/" . $self->shortname() . '-meta';
 	my $dst = '/tmp/' . $self->mpkg_filename();
 
 	my @sed_cmds = $self->info_substitution_sed_cmds();
@@ -377,7 +377,7 @@ sub create_metapackage {
 	$self->shell({silent => 0}, "cat $descfile @sed_cmds > $descfile.out");
 	my $resdir = $self->extras_path('metapackage/resources');
 
-	$self->shell({silent => 0}, "/Developer/Tools/packagemaker -build -mi '/tmp/universalbuild-pkgdst' -ds -v -r '$resdir' -i '$infofile.out' -d '$descfile.out' -p '$dst'");
+	$self->shell({silent => 0}, "/Developer/Applications/Utilities/PackageMaker.app/Contents/MacOS/PackageMaker -build -mi '/tmp/build-entropy-php-pkgdst' -ds -v -r '$resdir' -i '$infofile.out' -d '$descfile.out' -p '$dst'");
 
 	my $version = $self->config()->version() . '-' . $self->config()->release();
 

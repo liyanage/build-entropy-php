@@ -78,10 +78,10 @@ sub create_package {
 
 	$self->log("packaging");
 	
-	$self->shell("mkdir -p '/tmp/universalbuild-pkgdst'");
+	$self->shell("mkdir -p '/tmp/build-entropy-php-pkgdst'");
 	
-	my $dir = "/tmp/universalbuild-pkg/" . $self->shortname();
-	my $dst = "/tmp/universalbuild-pkgdst/" . $self->pkg_filename();
+	my $dir = "/tmp/build-entropy-php-pkg/" . $self->shortname();
+	my $dst = "/tmp/build-entropy-php-pkgdst/" . $self->pkg_filename();
 
 	my @sed_cmds = $self->info_substitution_sed_cmds();
 
@@ -102,7 +102,7 @@ sub create_package {
 
 	$self->prepackage_hook($dir);
 
-	$self->shell({silent => 0}, "/Developer/Tools/packagemaker -build -ds -v -r '$resdir' -i '$infofile.out' -d '$descfile.out' -p '$dst' -f '$dir'");
+	$self->shell({silent => 0}, "/Developer/Applications/Utilities/PackageMaker.app/Contents/MacOS/PackageMaker -build -ds -v -r '$resdir' -i '$infofile.out' -d '$descfile.out' -p '$dst' -f '$dir'");
 	
 
 }

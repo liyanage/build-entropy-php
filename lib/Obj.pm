@@ -70,7 +70,7 @@ sub shell {
 	$options->{log}    = 1 unless exists($options->{log});
 
 	my $cmd = join(" ", @items, " 3>&1 2>&3");
-	$cmd .= " 1>>/tmp/universalbuild.log" if $options->{silent};
+	$cmd .= " 1>>/tmp/build-entropy-php.log" if $options->{silent};
 #	$cmd .= " | tee /tmp/shell-$$.stdout";
 
 	$self->log("run shell: $cmd") if ($options->{log});
