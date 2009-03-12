@@ -377,17 +377,18 @@ sub create_metapackage {
 	$self->shell({silent => 0}, "cat $descfile @sed_cmds > $descfile.out");
 	my $resdir = $self->extras_path('metapackage/resources');
 
-	$self->shell({silent => 0}, "/Developer/Applications/Utilities/PackageMaker.app/Contents/MacOS/PackageMaker -build -mi '/tmp/build-entropy-php-pkgdst' -ds -v -r '$resdir' -i '$infofile.out' -d '$descfile.out' -p '$dst'");
-
 	my $version = $self->config()->version() . '-' . $self->config()->release();
 
-	my $xslt = $self->extras_path('metapackage/info-plist-postprocess.xslt');
-	$self->shell({silent => 0}, "xsltproc --stringparam version $version -o $dst/Contents/Info.plist.out $xslt $dst/Contents/Info.plist && mv -f $dst/Contents/Info.plist.out $dst/Contents/Info.plist"); 
+#	$self->shell({silent => 0}, "/Developer/Applications/Utilities/PackageMaker.app/Contents/MacOS/PackageMaker -build -mi '/tmp/build-entropy-php-pkgdst' -ds -v -r '$resdir' -i '$infofile.out' -d '$descfile.out' -p '$dst'");
+	$self->shell({silent => 0}, "/Developer/Applications/Utilities/PackageMaker.app/Contents/MacOS/PackageMaker -v --doc extras/php5/distribution-package/entropy-php.pmdoc --out 'Entropy PHP $version.pkg' --version $version --title 'Entropy PHP $version'");
 
-	my $variant_suffix = $self->config()->variants()->{$self->{variant}}->{suffix};
-	$self->shell("cd /tmp && tar -cvzf entropy-php-$version$variant_suffix.tar.gz", $self->mpkg_filename()); 
+#	my $xslt = $self->extras_path('metapackage/info-plist-postprocess.xslt');
+#	$self->shell({silent => 0}, "xsltproc --stringparam version $version -o $dst/Contents/Info.plist.out $xslt $dst/Contents/Info.plist && mv -f $dst/Contents/Info.plist.out $dst/Contents/Info.plist"); 
 
-	$self->shell('open /tmp/');
+#	my $variant_suffix = $self->config()->variants()->{$self->{variant}}->{suffix};
+#	$self->shell("cd /tmp && tar -cvzf entropy-php-$version$variant_suffix.tar.gz", $self->mpkg_filename()); 
+
+	$self->shell('open .');
 	
 }
 
