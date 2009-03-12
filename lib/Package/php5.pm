@@ -367,15 +367,15 @@ sub create_metapackage {
 	$self->log("metapackaging");
 	
 #	my $dir = "/tmp/build-entropy-php-pkg/" . $self->shortname() . '-meta';
-	my $dst = '/tmp/' . $self->mpkg_filename();
+#	my $dst = '/tmp/' . $self->mpkg_filename();
 
-	my @sed_cmds = $self->info_substitution_sed_cmds();
+#	my @sed_cmds = $self->info_substitution_sed_cmds();
 
-	my $infofile = $self->extras_path('metapackage/Info.plist');
-	$self->shell({silent => 0}, "cat $infofile @sed_cmds > $infofile.out");
-	my $descfile = $self->extras_path('metapackage/Description.plist');
-	$self->shell({silent => 0}, "cat $descfile @sed_cmds > $descfile.out");
-	my $resdir = $self->extras_path('metapackage/resources');
+#	my $infofile = $self->extras_path('metapackage/Info.plist');
+#	$self->shell({silent => 0}, "cat $infofile @sed_cmds > $infofile.out");
+#	my $descfile = $self->extras_path('metapackage/Description.plist');
+#	$self->shell({silent => 0}, "cat $descfile @sed_cmds > $descfile.out");
+#	my $resdir = $self->extras_path('metapackage/resources');
 
 	my $version = $self->config()->version() . '-' . $self->config()->release();
 
