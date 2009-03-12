@@ -54,9 +54,8 @@ sub php_dso_extension_names {
 
 sub package_filelist {
 	my $self = shift @_;
-	return $self->config()->extdir_path('curl'), qw(lib/libcurl*.dylib php.d/50-extension-curl.ini share/curl);
+	return $self->php_dso_extension_paths(), qw(lib/libcurl*.dylib php.d/50-extension-curl.ini share/curl);
 }
-
 
 
 

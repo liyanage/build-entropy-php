@@ -39,13 +39,14 @@ my $config = Config->new(
 # my $php5 = Package::php5->new(config => $config, variant => 'apache2');
 # $php5->create_distimage();
 
-my $php = Package::php5->new(config => $config, variant => 'apache2');
-#$php->install();
-$php->create_distimage();
-
 #use Package::pdflib_commercial;
 #my $pdflib = Package::pdflib_commercial->new(config => $config, variant => 'apache2');
-#$pdflib->prepackage_hook("/usr/local/php5");
+#$pdflib->prepackage_hook($config->prefix());
+
+my $php = Package::php5->new(config => $config, variant => 'apache2');
+$php->create_distimage();
+#$php->install();
+
 
 
 # use Package::pdflib;

@@ -52,7 +52,7 @@ sub php_dso_extension_names {
 
 sub package_filelist {
 	my $self = shift @_;
-	return $self->config()->extdir_path('mcrypt'), qw(
+	return $self->php_dso_extension_paths(), qw(
 		lib/libmcrypt*.dylib
 		php.d/50-extension-mcrypt.ini
 	);

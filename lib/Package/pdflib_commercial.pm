@@ -43,9 +43,10 @@ sub prepackage_hook {
 	my ($pkgroot) = @_;
 	
 	my $dp = $self->download_path();
-	my $extdir = "$pkgroot/" . $self->config()->extdir();
-	
-	$self->shell("mkdir -p $extdir");
+#	my $extdir = "$pkgroot/" . $self->config()->extdir();
+#	$self->shell("mkdir -p $extdir");
+	my $c = $self->config();
+	my $extdir = $c->prefix() . '/' . $c->extdir();
 	$self->shell("cp $dp $extdir/");
 }
 
@@ -58,7 +59,7 @@ sub php_dso_extension_names {
 
 sub package_filelist {
 	my $self = shift @_;
-	return $self->config()->extdir_path('pdf'), qw(php.d/50-extension-pdf.ini);
+	return $self->php_dso_extension_paths(), qw(php.d/50-extension-pdf.ini);
 }
 
 

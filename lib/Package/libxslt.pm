@@ -58,7 +58,7 @@ sub php_dso_extension_names {
 
 sub package_filelist {
 	my $self = shift @_;
-	return $self->config()->extdir_path('xsl'), qw(php.d/50-extension-xsl.ini lib/libexslt*.dylib lib/libxslt*.dylib);
+	return $self->php_dso_extension_paths(), qw(php.d/50-extension-xsl.ini lib/libexslt*.dylib lib/libxslt*.dylib);
 }
 
 
