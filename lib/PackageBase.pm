@@ -3,7 +3,7 @@ package PackageBase;
 use strict;
 use warnings;
 use base qw(Obj);
-
+use File::Glob ':glob';
 
 our $VERSION = '1.0';
 
@@ -70,11 +70,13 @@ sub create_package {
 
 	$_->create_package() foreach $self->dependencies();
 
+	my $prefix = $self->config()->prefix();
+
 	my $dir = "/tmp/build-entropy-php-pkg/" . $self->shortname();
 	$self->prepackage_hook($dir);
 
 	my @package_filelist = $self->package_filelist();
-	my @missing = grep {! -e $_} @package_filelist;
+	my @missing = grep {! -e $_} map {bsd_glob("$prefix/$_")} @package_filelist;
 	if (@missing) {
 		Carp::croak("files in package list but missing on disk: @missing");
 	}
@@ -101,7 +103,7 @@ sub create_package {
 	$self->shell("mkdir -p $dir");
 	$self->shell("rm -rf $dir/*");
 
-	$self->cd($self->config()->prefix());
+	$self->cd($prefix);
 
 	my $excludes = join(' ', map {"--exclude $_"} $self->package_excludelist());
 	$self->shell("tar $excludes -cf - $list | (cd $dir && tar -xf -)");

@@ -346,18 +346,12 @@ sub package_excludelist {
 }
 
 
-
-
-
 sub create_package {
-
 	my $self = shift @_;
-
 	$self->SUPER::create_package(@_);
-
 	$self->create_metapackage();
-
 }
+
 
 
 sub create_metapackage {

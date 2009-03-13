@@ -59,7 +59,7 @@ sub php_dso_extension_names {
 
 sub package_filelist {
 	my $self = shift @_;
-	return $self->php_dso_extension_paths(), qw(php.d/50-extension-pdf.ini);
+	return $self->php_dso_extension_paths(), qw(php.d/50-extension-libpdf_php.ini);
 }
 
 
