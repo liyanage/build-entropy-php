@@ -14,6 +14,10 @@ my $basedir = qx(pwd);
 chomp $basedir;
 die "you must run this script in the build-entropy-php directory" unless ($basedir =~ m#/build-entropy-php$#);
 
+if (-e "$ENV{HOME}/.pear") {
+	die "there is a ~/.pear directory, you need to move it aside temporarily for the build\n";
+}
+
 my $config = Config->new(
 	cpus                 => 2,
 	basedir              => $basedir,
@@ -32,7 +36,7 @@ my $config = Config->new(
 		},
 	},
 	version              => '5.2.9',
-	release              => 2,
+	release              => 3,
 	debug                => 1,
 );
 
