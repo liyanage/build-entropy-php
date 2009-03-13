@@ -25,8 +25,6 @@ sub init {
 }
 
 
-
-
 sub base_url {
 	my ($self) = shift;
 	Carp::croak(sprintf("class %s must override method %s", ref($self) || $self, (caller(0))[3]));
@@ -72,7 +70,16 @@ sub create_package {
 
 	$_->create_package() foreach $self->dependencies();
 
-	my $list = join(' ', $self->package_filelist());
+	my $dir = "/tmp/build-entropy-php-pkg/" . $self->shortname();
+	$self->prepackage_hook($dir);
+
+	my @package_filelist = $self->package_filelist();
+	my @missing = grep {! -e $_} @package_filelist;
+	if (@missing) {
+		Carp::croak("files in package list but missing on disk: @missing");
+	}
+
+	my $list = join(' ', @package_filelist);
 
 	return undef unless ($list);
 
@@ -80,7 +87,6 @@ sub create_package {
 	
 	$self->shell("mkdir -p '/tmp/build-entropy-php-pkgdst'");
 	
-	my $dir = "/tmp/build-entropy-php-pkg/" . $self->shortname();
 	my $dst = "/tmp/build-entropy-php-pkgdst/" . $self->pkg_filename();
 
 	my @sed_cmds = $self->info_substitution_sed_cmds();
@@ -99,8 +105,6 @@ sub create_package {
 
 	my $excludes = join(' ', map {"--exclude $_"} $self->package_excludelist());
 	$self->shell("tar $excludes -cf - $list | (cd $dir && tar -xf -)");
-
-	$self->prepackage_hook($dir);
 
 	$self->shell({silent => 0}, "/Developer/Applications/Utilities/PackageMaker.app/Contents/MacOS/PackageMaker -build -ds -v -r '$resdir' -i '$infofile.out' -d '$descfile.out' -p '$dst' -f '$dir'");
 	
@@ -443,6 +447,11 @@ sub php_extension_configure_flags {
 
 sub php_dso_extension_names {
 	return undef;
+}
+
+sub php_dso_extension_paths {
+	my $self = shift;
+	return map {$self->config()->extdir_path("$_.so")} $self->php_dso_extension_names();
 }
 
 

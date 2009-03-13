@@ -69,17 +69,12 @@ sub php_dso_extension_names {
 sub package_filelist {
 	my $self = shift @_;
 	return
-		$self->config()->extdir_path('mysql'), 
-		$self->config()->extdir_path('mysqli'), 
-		$self->config()->extdir_path('pdo_mysql'),
+		$self->php_dso_extension_paths(),
 		qw(
 			lib/mysql/lib*.dylib
 			php.d/50-extension-*mysql*.ini
 		);
 }
-
-
-
 
 
 1;
