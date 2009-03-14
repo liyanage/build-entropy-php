@@ -14,9 +14,12 @@ my $basedir = qx(pwd);
 chomp $basedir;
 die "you must run this script in the build-entropy-php directory" unless ($basedir =~ m#/build-entropy-php$#);
 
-if (-e "$ENV{HOME}/.pear") {
-	die "there is a ~/.pear directory, you need to move it aside temporarily for the build\n";
-}
+check_dotpear();
+check_arch();
+
+
+
+
 
 my $config = Config->new(
 	cpus                 => 2,
@@ -86,3 +89,20 @@ $php->create_distimage();
 # use Package::mysql;
 # my $p = Package::mysql->new(config => $config, variant => 'apache2');
 # $p->install();
+
+
+# If there is a ~/.pear directory, "make install-pear" will not work properly
+sub check_dotpear {
+	if (-e "$ENV{HOME}/.pear") {
+		die "There is a ~/.pear directory, you need to move it aside temporarily for the build\n";
+	}
+}
+
+# if we don't build on x86_64, the resulting mcrypt extension will work on i386 but will crash on x86_64
+sub check_arch {
+	my %sysctl = map {split(/:\s*/)} qx(sysctl -a 2>/dev/null);
+	unless ($sysctl{'hw.optional.x86_64'}) {
+		die "This build process must be run on an x86_64 architecture system\n";
+	}
+}
+
