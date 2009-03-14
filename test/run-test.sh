@@ -7,7 +7,6 @@ rm -rf $TESTDIR
 mkdir $TESTDIR
 
 # launch mysql
-
 UNITTEST_MYSQL_DIR=$TESTDIR/mysql
 mkdir $UNITTEST_MYSQL_DIR
 . test-mysqld-start.sh
@@ -25,8 +24,6 @@ for arch in i386 ppc x86_64; do
 	rm -f httpd/serverroot/logs/*.{pid,lock}*
 	echo
 done
-
-
 
 # shut down mysql
 . test-mysqld-stop.sh

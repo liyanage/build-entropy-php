@@ -5,7 +5,7 @@ use warnings;
 use IO::Dir;
 use LWP::UserAgent;
 
-use Test::More tests => 3;
+use Test::More tests => 5;
 
 my %conf = @ARGV;
 my $content;
@@ -19,6 +19,12 @@ is($content, "This is very important data\n", 'mcrypt');
 
 $content = get_url_success("test-mysql.php?mysql_socket=$conf{mysql_dir}/mysql-test.sock");
 like($content, qr/Resource id #\d+, test value: 2/, "mysql connection");
+
+$content = get_url_success("test-openssl.php");
+like($content, qr/BEGIN RSA PRIVATE KEY/, "openssl");
+
+$content = get_url_success("test-mhash.php");
+like($content, qr/The hash is \w{32}/, "mhash");
 
 
 sub ua {
