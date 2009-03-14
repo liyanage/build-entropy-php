@@ -6,7 +6,6 @@
 
 use strict;
 use warnings;
-use Data::Dumper;
 use Imports;
 use Package::php5;
 
@@ -49,8 +48,8 @@ my $config = Config->new(
 #$pdflib->prepackage_hook($config->prefix());
 
 my $php = Package::php5->new(config => $config, variant => 'apache2');
-# $php->create_distimage();
-$php->install();
+$php->create_distimage();
+# $php->install();
 
 
 
