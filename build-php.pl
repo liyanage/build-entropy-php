@@ -6,7 +6,7 @@
 
 use strict;
 use warnings;
-
+use Data::Dumper;
 use Imports;
 use Package::php5;
 
@@ -16,8 +16,6 @@ die "you must run this script in the build-entropy-php directory" unless ($based
 
 check_dotpear();
 check_arch();
-
-
 
 
 
@@ -51,8 +49,8 @@ my $config = Config->new(
 #$pdflib->prepackage_hook($config->prefix());
 
 my $php = Package::php5->new(config => $config, variant => 'apache2');
-$php->create_distimage();
-#$php->install();
+# $php->create_distimage();
+$php->install();
 
 
 
@@ -100,8 +98,8 @@ sub check_dotpear {
 
 # if we don't build on x86_64, the resulting mcrypt extension will work on i386 but will crash on x86_64
 sub check_arch {
-	my %sysctl = map {split(/:\s*/)} qx(sysctl -a 2>/dev/null);
-	unless ($sysctl{'hw.optional.x86_64'}) {
+	my $x86_64 = `sysctl -n hw.optional.x86_64`; chomp $x86_64;
+	unless ($x86_64) {
 		die "This build process must be run on an x86_64 architecture system\n";
 	}
 }
