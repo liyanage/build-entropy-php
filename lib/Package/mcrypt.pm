@@ -7,14 +7,6 @@ use base qw(Package);
 
 our $VERSION = '2.5.8';
 
-sub init {
-	my $self = shift @_;
-  # if (-e "/usr/lib/libltdl.dylib") {
-  #   die "/usr/lib/libltdl.dylib is present on this system but will be missing on target systems, please move it aside. died";
-  # }
-	return $self->SUPER::init(@_);
-}
-
 
 sub base_url {
 	return "http://dl.sourceforge.net/sourceforge/mcrypt";

@@ -15,7 +15,7 @@ die "you must run this script in the build-entropy-php directory" unless ($based
 
 check_dotpear();
 check_arch();
-
+check_ltdl();
 
 
 my $config = Config->new(
@@ -36,7 +36,7 @@ my $config = Config->new(
 		},
 	},
 	version              => '5.2.9',
-	release              => 3,
+	release              => 4,
 	debug                => 1,
 );
 
@@ -91,11 +91,20 @@ $php->create_distimage();
 # If there is a ~/.pear directory, "make install-pear" will not work properly
 sub check_dotpear {
 	if (-e "$ENV{HOME}/.pear") {
-		die "There is a ~/.pear directory, you need to move it aside temporarily for the build\n";
+		die "There is a ~/.pear directory, please move it aside temporarily for the build\n";
 	}
 }
 
-# if we don't build on x86_64, the resulting mcrypt extension will work on i386 but will crash on x86_64
+# If Xcode is installed then the mcrypt extension build picks up libltdl,
+# which will be missing on target systems without Xcode.
+sub check_ltdl {
+	if (glob('/usr/lib/libltdl.*')) {
+		die "/usr/lib/libltdl.* files are present on this system but will be missing on target systems, please move them aside temporarily for the build:\nsudo mkdir -p /usr/lib/off && sudo mv /usr/lib/libltdl.* /usr/lib/off/\n";
+	}
+}
+
+# if we don't build on x86_64, the resulting mcrypt extension will
+# work on i386 but crash on x86_64
 sub check_arch {
 	my $x86_64 = `sysctl -n hw.optional.x86_64`; chomp $x86_64;
 	unless ($x86_64) {

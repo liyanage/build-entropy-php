@@ -376,6 +376,7 @@ sub create_metapackage {
 #	$self->shell({silent => 0}, "/Developer/Applications/Utilities/PackageMaker.app/Contents/MacOS/PackageMaker -build -mi '/tmp/build-entropy-php-pkgdst' -ds -v -r '$resdir' -i '$infofile.out' -d '$descfile.out' -p '$dst'");
 
 	my $pmdoc = $self->extras_path('distribution-package/entropy-php.pmdoc');
+	$self->shell(qq!rm -f '/tmp/Entropy PHP '*.pkg!);
 	$self->shell({silent => 0}, "/Developer/Applications/Utilities/PackageMaker.app/Contents/MacOS/PackageMaker -v --doc $pmdoc --out '/tmp/Entropy PHP $version.pkg' --version $version --title 'Entropy PHP $version'");
 
 #	my $xslt = $self->extras_path('metapackage/info-plist-postprocess.xslt');
