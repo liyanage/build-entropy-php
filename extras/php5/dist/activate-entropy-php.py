@@ -11,7 +11,12 @@ prefix = '{prefix}'
 #
 httpd_conf_path = prefix + '/entropy-php.conf'
 
-httpd_conf_symlink = '/etc/apache2/other/+entropy-php.conf'
+
+# test is reversed, shell exit code true/false values
+if os.system("sw_vers | grep -q Server"):
+	httpd_conf_symlink = '/etc/apache2/other/+entropy-php.conf'
+else:
+	httpd_conf_symlink = '/etc/apache2/sites/+entropy-php.conf'
 
 if os.system("test -h " + httpd_conf_symlink):
 	os.symlink(httpd_conf_path, httpd_conf_symlink)
