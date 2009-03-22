@@ -5,7 +5,6 @@ import sys
 
 prefix = '{prefix}'
 
-
 # Create symlink to Apache conf file snippet which loads the PHP module.
 # Different places for the symlink in Mac OS X Client / Server
 #
@@ -13,7 +12,7 @@ httpd_conf_path = prefix + '/entropy-php.conf'
 
 
 # test is reversed, shell exit code true/false values
-if os.system("sw_vers | grep -q Server"):
+if os.system("sw_vers -productName | grep -qi server"):
 	httpd_conf_symlink = '/etc/apache2/other/+entropy-php.conf'
 else:
 	httpd_conf_symlink = '/etc/apache2/sites/+entropy-php.conf'
