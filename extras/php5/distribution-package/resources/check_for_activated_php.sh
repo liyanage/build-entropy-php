@@ -1,6 +1,6 @@
 #!/bin/sh
 # 
-# Figure out if another PHP module is already active before
+# Figure out if a different, non-Entropy PHP module is already active before
 # attempting to install the Entropy PHP distribution.
 #
 # Exits with exit code
@@ -14,20 +14,11 @@ else
 	SYMLINK=/etc/apache2/other/+entropy-php.conf
 fi
 
-TARGET=$(readlink $SYMLINK)
-
-if [ "$TARGET" ]; then
-	echo temporarily deactivating entropy PHP conf
-	rm $SYMLINK
-fi
+# If our conf symlink alread exists, we assume that
+# this was sorted out during the initial installation
+[ -e "$SYMLINK" ] && exit 1
 
 /usr/sbin/httpd -M 2>&1 | grep -q php5_module
 RESULT=$?
 echo $RESULT > /tmp/entropy-check_for_activated_php_result
-
-if [ "$TARGET" ]; then
-	echo restoring entropy PHP conf
-	ln -s "$TARGET" $SYMLINK
-fi
-
 exit $RESULT
