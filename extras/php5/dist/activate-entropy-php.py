@@ -33,7 +33,7 @@ else:
 os.chdir(prefix + "/lib")
 if not os.path.exists("php.ini"):
 	sys.stderr.write("Entropy PHP %s/lib/php.ini not present, copying from php.ini-recommended\n" % prefix)
-	os.system("sed -e 's#mysql.default_socket =.*#mysql.default_socket = " + mysql_socket + "#' < php.ini-recommended > php.ini")
+	os.system("sed -E -e 's#(mysqli?.default_socket =).*#\\1 " + mysql_socket + "#' < php.ini-recommended > php.ini")
 else:
 	sys.stderr.write("Entropy PHP %s/lib/php.ini already present\n" % prefix)
 
