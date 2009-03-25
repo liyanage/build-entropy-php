@@ -14,7 +14,7 @@ else
 	SYMLINK=/etc/apache2/other/+entropy-php.conf
 fi
 
-# If our conf symlink alread exists, we assume that
+# If our conf symlink already exists, we assume that
 # this was sorted out during the initial installation
 [ -e "$SYMLINK" ] && exit 1
 
