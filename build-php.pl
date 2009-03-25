@@ -35,8 +35,8 @@ my $config = Config->new(
 			suffix       => '-apache2',
 		},
 	},
-	version              => '5.2.10',
-	release              => 1,
+	version              => '5.3.0RC1',
+	release              => 6,
 	debug                => 1,
 );
 
@@ -90,8 +90,8 @@ $php->create_distimage();
 
 # If there is a ~/.pear directory, "make install-pear" will not work properly
 sub check_dotpear {
-	if (-e "$ENV{HOME}/.pear") {
-		die "There is a ~/.pear directory, please move it aside temporarily for the build\n";
+	if (-e "$ENV{HOME}/.pear" || -e "$ENV{HOME}/.pearrc") {
+		die "There is a ~/.pear directory and/or ~/.pearrc file, please move it aside temporarily for the build\n";
 	}
 }
 
