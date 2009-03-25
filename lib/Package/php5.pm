@@ -259,7 +259,6 @@ sub install {
 
 
 sub create_dso_ini_files {
-
 	my $self = shift @_;
 
 	my @dso_names = grep {$_} map {$_->php_dso_extension_names()} $self->dependencies();
@@ -267,7 +266,6 @@ sub create_dso_ini_files {
 	my $extdir = $self->config()->extdir();
 	$self->shell({silent => 0}, "echo 'extension=$_.so' > $prefix/php.d/50-extension-$_.ini") foreach (@dso_names);
 	$self->shell({silent => 0}, qq!echo 'extension_dir=$prefix/$extdir' > $prefix/php.d/10-extension_dir.ini!);
-
 }
 
 
@@ -325,7 +323,6 @@ sub cc {
 
 
 sub package_filelist {
-
 	my $self = shift @_;
 
 	return qw(
@@ -340,7 +337,6 @@ sub package_filelist {
 		include/php
 		php.d/10-extension_dir.ini
 	);
-	
 }
 
 sub package_excludelist {
@@ -386,7 +382,6 @@ sub package_resdir {
 
 
 sub prepackage_hook {
-
 	my $self = shift @_;
 	my ($pkgroot) = @_;
 
