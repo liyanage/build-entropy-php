@@ -35,7 +35,7 @@ sub dependency_names {
 	#pdflib
 	#tidy 
 	#ming
-	return qw(pdflib_commercial mssql mhash memcache imapcclient libxml2 libxslt gettext curl libpng libjpeg libfreetype mysql postgresql mcrypt);
+	return qw(pdflib_commercial mssql memcache imapcclient libxml2 libxslt gettext curl libpng libjpeg libfreetype mysql postgresql mcrypt);
 }
 
 
@@ -86,6 +86,7 @@ sub configure_flags {
  		'--enable-bcmath',
  		'--enable-calendar',
  		'--with-iodbc',
+ 		'--with-mhash',
 	);
 
 #		'--with-snmp=/usr', #32 bit only in leopard

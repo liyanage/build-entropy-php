@@ -6,10 +6,6 @@
 
 use strict;
 use warnings;
-#use Carp;
-#$SIG{__WARN__} = sub {my $i; while (my @x = caller($i++)) {print "caller $i @x\n"}; print @_};
-$SIG{__DIE__} = sub {my $i; while (my @x = caller($i++)) {print "caller $i @x\n"}; print @_};
-#$SIG{__DIE__} = sub {my @x = @_; Carp::cluck(@x)};
 
 use Imports;
 use Package::php5;

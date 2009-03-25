@@ -83,9 +83,11 @@ sub shell {
 	if ($status) {
 		my $msg = "shell command failed with status '$status': '$cmd'"; #, output='$output'
 		if ($options->{fatal}) {
-			Carp::confess "fatal: $msg";
+			$msg = "fatal: $msg";
+			Carp::confess($msg);
 		} else {
-			$self->log("nonfatal: $msg");
+			$msg = "nonfatal: $msg";
+			$self->log($msg);
 		}
 	}
 
@@ -133,18 +135,10 @@ sub AUTOLOAD {
 
 
 sub to_string {
-
 	my $self = shift @_;
-
 	my $class = ref($self) || $self;
 	return "[$class]";
-
 }
-
-
-
-
-
 
 1;
 
