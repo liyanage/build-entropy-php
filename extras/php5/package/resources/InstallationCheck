@@ -4,8 +4,12 @@
 # attempting to install the Entropy PHP distribution.
 #
 # Exits with exit code
-# - 0 (true) if another module is active
-# - 1 (false) otherwise
+# - 0 (true) if no other module is active
+# - 112 (false) otherwise
+# The false value maps to the detailed message with index 16
+# in the InstallationCheck.strings table. See
+# http://s.sudre.free.fr/Stuff/PackageMaker_Howto.html
+# for details about this mechanism
 #
 
 if sw_vers -productName | grep -qi server; then
@@ -16,9 +20,11 @@ fi
 
 # If our conf symlink already exists, we assume that
 # this was sorted out during the initial installation
-[ -e "$SYMLINK" ] && exit 1
+[ -e "$SYMLINK" ] && exit 0
 
-/usr/sbin/httpd -M 2>&1 | grep -q php5_module
-RESULT=$?
-echo $RESULT > /tmp/entropy-check_for_activated_php_result
-exit $RESULT
+if /usr/sbin/httpd -M 2>&1 | grep -q php5_module; then
+	exit 112;
+else
+	exit 0;
+fi
+

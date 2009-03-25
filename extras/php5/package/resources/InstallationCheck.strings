@@ -1,0 +1,1 @@
+"16" = "A different PHP Apache module is activated on this system. You have to deactivate that module before installing this package. On OS X Client, you should disable the corresponding LoadModule line in /etc/apache2/httpd.conf by putting a # in front of it. On OS X Server, you should disable the other PHP module in the Server Admin application.";
