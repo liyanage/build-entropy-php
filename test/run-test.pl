@@ -5,7 +5,7 @@ use warnings;
 use IO::Dir;
 use LWP::UserAgent;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 
 my %conf = @ARGV;
 my $content;
@@ -25,6 +25,9 @@ like($content, qr/BEGIN RSA PRIVATE KEY/, "openssl");
 
 $content = get_url_success("test-mhash.php");
 like($content, qr/The hash is \w{32}/, "mhash");
+
+$content = get_url_success("test-domxml.php");
+like($content, qr#<root><node/></root>#, "DOM XML");
 
 
 sub ua {
