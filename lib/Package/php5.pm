@@ -15,7 +15,8 @@ use base qw(Package);
 # switch to pdflib 7
 
 sub base_url {
-	return "http://us2.php.net/distributions";
+#	return "http://us2.php.net/distributions";
+	return "http://downloads.php.net/johannes";
 }
 
 
@@ -237,6 +238,7 @@ sub install {
 	$self->cd_packagesrcdir();
 	$self->shell({silent => 0}, "cat $extrasdir/dist/entropy-php.conf | sed -e 's!{prefix}!$prefix!g' > $prefix/entropy-php.conf");
 	$self->shell({silent => 0}, "cat $extrasdir/dist/activate-entropy-php.py | sed -e 's!{prefix}!$prefix!g' > $prefix/bin/activate-entropy-php.py");
+	$self->shell({silent => 0}, "cp php.ini-production php.ini-recommended");
 	$self->shell({silent => 0}, "cp php.ini-recommended $prefix/lib/");
 	unless (-e "$prefix/etc/pear.conf.default") {
 		$self->shell($self->make_command(), "install-pear");
