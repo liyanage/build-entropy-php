@@ -1,6 +1,6 @@
 <pkmkdoc spec="1.12"><properties><title>Entropy PHP 5.x.x-y</title><build>/Users/liyanage/Desktop/Entropy PHP x.pkg</build><organization>ch.entropy</organization><userSees ui="both"/><min-target os="3"/><domain/></properties><distribution><versions min-spec="1.000000"/><scripts>
 function checkExistingPhp() {
-	var isOsXServer = system.version['ProductName'].match(/server/i);
+	var isOsXServer = system.files.fileExistsAtPath('/System/Library/CoreServices/ServerVersion.plist');
 	system.log("Is OS X Server: " + isOsXServer);
 	var entropyHttpdConfSymlink = isOsXServer ? '/etc/apache2/sites/+entropy-php.conf' : '/etc/apache2/other/+entropy-php.conf';
 	system.log("Entropy PHP httpd conf symlink path: " + entropyHttpdConfSymlink);
@@ -10,9 +10,8 @@ function checkExistingPhp() {
 	// If our conf symlink already exists, we assume that
 	// this was sorted out during the initial installation
 	if (symlinkExists) return false;
-	
+
 	// The shell returns 0 if the grep matched, i.e. another PHP is active
-//	var otherPhpActive = !system.run("/usr/sbin/httpd -M 2>&amp;1 | grep -q php5_module");
 	var otherPhpActive = !system.run("/bin/sh", "-c", "/usr/sbin/httpd -M 2>&amp;1 | grep -q php5_module");
 	system.log("Other PHP active: " + otherPhpActive);
 	return otherPhpActive;
