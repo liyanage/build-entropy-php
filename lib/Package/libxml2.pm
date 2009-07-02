@@ -8,6 +8,9 @@ use base qw(Package);
 our $VERSION = '2.6.30';
 
 
+sub dependency_names {
+	return qw(iconv);
+}
 
 
 

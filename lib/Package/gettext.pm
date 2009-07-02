@@ -10,9 +10,10 @@ our $VERSION = '0.16.1';
 
 
 
-#sub dependency_names {
-#	return qw(iconv);
-#}
+sub dependency_names {
+	return qw(iconv);
+}
+
 
 sub base_url {
 	return "ftp://sunsite.cnlab-switch.ch/mirror/gnu/gettext";

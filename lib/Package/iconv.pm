@@ -5,7 +5,7 @@ use warnings;
 
 use base qw(Package);
 
-our $VERSION = '1.11';
+our $VERSION = '1.13';
 
 
 
@@ -67,7 +67,7 @@ sub package_filelist {
 
 	my $self = shift @_;
 
-	return $self->config()->extdir_path('gettext.so'), qw(
+	return qw(
 		lib/libiconv*.dylib
 	);
 	

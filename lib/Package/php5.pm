@@ -35,7 +35,7 @@ sub dependency_names {
 	#pdflib
 	#tidy 
 	#ming
-	return qw(pdflib_commercial mssql memcache imapcclient libxml2 libxslt gettext curl libpng libjpeg libfreetype mysql postgresql mcrypt);
+	return qw(iconv pdflib_commercial mssql memcache imapcclient libxml2 libxslt gettext curl libpng libjpeg libfreetype mysql postgresql mcrypt);
 }
 
 
