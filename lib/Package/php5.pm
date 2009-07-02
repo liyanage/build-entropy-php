@@ -87,6 +87,7 @@ sub configure_flags {
  		'--enable-calendar',
  		'--with-iodbc',
  		'--with-mhash',
+# 		'--enable-cgi',
 	);
 
 #		'--with-snmp=/usr', #32 bit only in leopard
