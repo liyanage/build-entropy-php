@@ -331,7 +331,8 @@ sub package_filelist {
 		entropy-php.conf
 		libphp5.so
 		etc/pear.conf.default
-		lib/libxml2*.dylib lib/libpng*.dylib lib/libfreetype*.dylib lib/libt1*.dylib
+		lib/libxml2*.dylib lib/libpng*.dylib lib/libfreetype*.dylib
+		lib/libiconv*.dylib
 		bin/php* bin/pear bin/pecl bin/peardev bin/activate-*
 		lib/php
 		lib/build
@@ -339,6 +340,8 @@ sub package_filelist {
 		include/php
 		php.d/10-extension_dir.ini
 	);
+	
+	# lib/libt1*.dylib
 }
 
 sub package_excludelist {
