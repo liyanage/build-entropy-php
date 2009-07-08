@@ -35,9 +35,9 @@ sub dependency_names {
 	#pdflib
 	#tidy 
 	#ming
-	return qw(iconv pdflib_commercial mssql memcache imapcclient libxml2 libxslt gettext curl libpng libjpeg libfreetype mysql postgresql mcrypt);
+	#mysql -> mysqlnd
+	return qw(iconv pdflib_commercial mssql memcache imapcclient libxml2 libxslt gettext curl libpng libjpeg libfreetype  postgresql mcrypt);
 }
-
 
 sub subpath_for_check {
 	return "libphp5.so";
@@ -87,6 +87,10 @@ sub configure_flags {
  		'--enable-calendar',
  		'--with-iodbc',
  		'--with-mhash',
+		'--with-mysql=mysqlnd',
+		'--with-mysqli=mysqlnd',
+		'--with-pdo-mysql=mysqlnd',
+
 # 		'--enable-cgi',
 	);
 
@@ -283,7 +287,7 @@ sub create_distimage {
 sub patchfiles {
 	my $self = shift @_;
 #	return qw(php-entropy.patch);
-	return qw(php-entropy.patch php-entropy-imap.patch);
+	return qw(php-entropy.patch php-entropy-imap.patch php-mysqlnd-ppc64.patch);
 }
 
 
