@@ -5,7 +5,7 @@ use warnings;
 use IO::Dir;
 use LWP::UserAgent;
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 
 my %conf = @ARGV;
 my $content;
@@ -28,6 +28,9 @@ like($content, qr/The hash is \w{32}/, "mhash");
 
 $content = get_url_success("test-domxml.php");
 like($content, qr#<root><node/></root>#, "DOM XML");
+
+$content = get_url_success("test-pdf.php");
+like($content, qr#^%PDF-1.6#, "PDFlib");
 
 
 sub ua {

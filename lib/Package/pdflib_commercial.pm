@@ -5,8 +5,8 @@ use warnings;
 
 use base qw(PackageBinary);
 
-our $VERSION = '7.0.3';
-
+our $VERSION = '7.0.4';
+our $PATCHLEVEL = '5';
 
 sub download {
 	my $self = shift @_;
@@ -14,14 +14,14 @@ sub download {
 	return if ($self->is_downloaded());
 
 	my $dp = $self->download_path();
-	my $dmg = "PDFlib-7.0.3p5-MacOSX-10.5-Universal-php.dmg";
+	my $dmg = "PDFlib-${VERSION}p$PATCHLEVEL-MacOSX-10.5-Universal-php.dmg";
 	my $mountpoint = '/tmp/'.$self->filename();
 
 	$self->log("downloading commercial PDFlib");
 	$self->cd('/tmp');
-	$self->shell("curl -O http://www.pdflib.com/binaries/PDFlib/703/$dmg");
+	$self->shell("curl -O http://www.pdflib.com/binaries/PDFlib/704/$dmg");
 	$self->shell("hdiutil mount -mountpoint $mountpoint $dmg");
-	$self->shell("cp $mountpoint/bind/php5/php-520/libpdf_php.so $dp");
+	$self->shell("cp $mountpoint/bind/php5/php-530/libpdf_php.so $dp");
 	$self->shell("hdiutil unmount $mountpoint");
 }
 

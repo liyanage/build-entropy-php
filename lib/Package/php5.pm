@@ -35,7 +35,7 @@ sub dependency_names {
 	#pdflib
 	#tidy 
 	#ming
-	#mysql -> mysqlnd
+	#mysql (replaced by mysqlnd)
 	return qw(iconv pdflib_commercial mssql memcache imapcclient libxml2 libxslt gettext curl libpng libjpeg libfreetype  postgresql mcrypt);
 }
 

@@ -36,7 +36,7 @@ my $config = Config->new(
 		},
 	},
 	version              => '5.3.0',
-	release              => 2,
+	release              => 3,
 	debug                => 1,
 );
 
