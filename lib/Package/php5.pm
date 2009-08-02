@@ -85,6 +85,7 @@ sub configure_flags {
  		'--enable-mbstring',
  		'--enable-bcmath',
  		'--enable-calendar',
+ 		'--enable-intl',
  		'--with-iodbc',
  		'--with-mhash',
 		'--with-mysql=mysqlnd',
